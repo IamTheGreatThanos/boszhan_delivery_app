@@ -1,5 +1,5 @@
+import 'package:boszhan_delivery_app/components/product_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class OrderInfoPage extends StatefulWidget {
   // OrderInfoPage(this.product);
@@ -10,6 +10,8 @@ class OrderInfoPage extends StatefulWidget {
 }
 
 class _OrderInfoPageState extends State<OrderInfoPage> {
+
+  List<String> products = ['asdf','asdf'];
 
   @override
   void initState() {
@@ -37,8 +39,11 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
           bottomOpacity: 1,
           iconTheme: IconThemeData(color: Colors.white)
         ),
-        body: Container(
-          // child:
+        body: ListView.separated(itemCount: products.length,
+            itemBuilder: (BuildContext context, int index) => index % 2 == 0 ? const ProductCard() : Ink(color: Colors.red[50], child: const ProductCard()),
+            separatorBuilder: (context, index){
+              return const Divider();
+            }
           ),
         )
     );
