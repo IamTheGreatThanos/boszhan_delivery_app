@@ -32,7 +32,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
         appBar: AppBar(
           elevation: 0,
           centerTitle: true,
-          title: Text('Выдача заказа', style: TextStyle(color: Colors.white, fontSize: 18)),
+          title: Text('Выдача заказа', style: TextStyle(color: Colors.white, fontSize: 20)),
           automaticallyImplyLeading: true,
           backgroundColor: Colors.red,
           shadowColor: Colors.white,

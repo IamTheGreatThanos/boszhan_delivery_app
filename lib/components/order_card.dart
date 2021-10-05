@@ -13,7 +13,7 @@ class OrderCard extends StatelessWidget{
         backgroundColor: Colors.grey,
         child: Icon(Icons.location_pin, color: Colors.white,)
       ),
-      title: const Text("Название: Чудо,    Адрес: Жаскент 14/1"),
+      title: const Text("Название: Чудо,    Адрес: Жаскент 14/1", style: TextStyle(fontSize: 20)),
       trailing: const Icon(Icons.keyboard_arrow_right),
       onTap: (){
         showModalBottomSheet(

@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           elevation: 0,
           centerTitle: true,
-          title: Text('Доставка', style: TextStyle(color: Colors.white, fontSize: 18)),
+          title: Text('Доставка', style: TextStyle(color: Colors.white, fontSize: 20)),
           automaticallyImplyLeading: true,
           backgroundColor: Colors.red,
           bottomOpacity: 1,

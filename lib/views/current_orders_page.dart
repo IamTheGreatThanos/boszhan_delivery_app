@@ -32,7 +32,7 @@ class _CurrentOrdersPageState extends State<CurrentOrdersPage> {
         appBar: AppBar(
           elevation: 0,
           centerTitle: true,
-          title: Text('Текущие заказы', style: TextStyle(color: Colors.white, fontSize: 18)),
+          title: Text('Текущие заказы', style: TextStyle(color: Colors.white, fontSize: 20)),
           automaticallyImplyLeading: true,
           backgroundColor: Colors.red,
           shadowColor: Colors.white,
