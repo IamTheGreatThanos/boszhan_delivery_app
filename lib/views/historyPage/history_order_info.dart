@@ -33,7 +33,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
         child: Scaffold(
           appBar: PreferredSize(
               preferredSize: Size.fromHeight(60.0),
-              child: buildAppBar('Выдача заказа')
+              child: buildAppBar('Просмотр заказа')
           ),
           body: ListView.separated(itemCount: products.length,
             itemBuilder: (BuildContext context, int index) => index % 2 == 0 ? const ProductCard() : Ink(color: Colors.red[50], child: const ProductCard()),
