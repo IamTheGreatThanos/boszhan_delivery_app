@@ -2,6 +2,7 @@ import 'package:boszhan_delivery_app/services/api.dart';
 import 'package:boszhan_delivery_app/views/home_page.dart';
 import 'package:boszhan_delivery_app/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -117,17 +118,23 @@ class _LoginPageState extends State<LoginPage> {
   void login() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await Api().login(emailController.text, passwordController.text);
-    print('1');
     print(response);
+    if (response != null){
+      prefs.setString("token", response['token']);
+      prefs.setInt("user_id", response['user']['id']);
+      prefs.setString("full_name", response['user']['full_name']);
 
-    prefs.setString("token", response['token']);
-    prefs.setInt("user_id", response['user']['id']);
-    prefs.setString("full_name", response['user']['full_name']);
-
+      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+    }
+    else{
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
+      ));
+    }
     // await StoreRepository().saveAllStores(response['user']['id']);
     // var testStores = await DBProvider.db.getAllStores();
 
-    Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+
 
   }
 }

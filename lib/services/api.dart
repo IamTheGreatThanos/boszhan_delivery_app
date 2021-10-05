@@ -14,10 +14,9 @@ class Api {
         "password": password,
         "role" : 2
       });
-      print('Success');
+      print(response.data);
       return response.data['data'];
     } catch (e) {
-      print('Error');
       return null;
     }
   }
