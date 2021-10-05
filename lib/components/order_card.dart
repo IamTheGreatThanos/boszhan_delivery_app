@@ -61,7 +61,7 @@ class OrderCard extends StatelessWidget{
                         icon: const Icon(Icons.location_pin, color: Colors.white),
                         label: const Text("ПОКАЗАТЬ НА КАРТЕ"),
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => OrderInfoPage()));
+                          // Navigator.push(context, MaterialPageRoute(builder: (context) => OrderInfoPage()));
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.grey,
