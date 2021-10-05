@@ -1,4 +1,4 @@
-import 'package:boszhan_delivery_app/views/order_info_page.dart';
+import 'package:boszhan_delivery_app/views/currentPage/order_info_page.dart';
 import 'package:flutter/material.dart';
 
 class OrderCard extends StatelessWidget{

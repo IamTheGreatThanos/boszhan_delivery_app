@@ -1,4 +1,5 @@
 import 'package:boszhan_delivery_app/components/order_card.dart';
+import 'package:boszhan_delivery_app/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 
 class CurrentOrdersPage extends StatefulWidget {
@@ -29,15 +30,9 @@ class _CurrentOrdersPageState extends State<CurrentOrdersPage> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          centerTitle: true,
-          title: Text('Текущие заказы', style: TextStyle(color: Colors.white, fontSize: 20)),
-          automaticallyImplyLeading: true,
-          backgroundColor: Colors.red,
-          shadowColor: Colors.white,
-          bottomOpacity: 1,
-          iconTheme: IconThemeData(color: Colors.white)
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(60.0),
+            child: buildAppBar('Текущие заказы')
         ),
         body: ListView.separated(itemCount: orders.length,
             itemBuilder: (BuildContext context, int index) => OrderCard(),

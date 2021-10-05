@@ -1,5 +1,6 @@
 import 'dart:io';
-import 'package:boszhan_delivery_app/views/current_orders_page.dart';
+import 'package:boszhan_delivery_app/views/currentPage/current_orders_page.dart';
+import 'package:boszhan_delivery_app/views/historyPage/orders_history_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -86,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                   child: ElevatedButton(
                     child: const Text("ВЫПОЛНЕННЫЕ"),
                     onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => CurrentOrdersPage()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => OrdersHistoryPage()));
                     },
                     style: ElevatedButton.styleFrom(
                       primary: Colors.red,
