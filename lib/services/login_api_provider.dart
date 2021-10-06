@@ -19,8 +19,8 @@ class LoginProvider{
     );
 
     if (response.statusCode == 200) {
-      Map<String, dynamic> status = jsonDecode(response.body);
-      return status['data'];
+      Map<String, dynamic> result = jsonDecode(response.body);
+      return result['data'];
     }
     else {
       return 'Error';

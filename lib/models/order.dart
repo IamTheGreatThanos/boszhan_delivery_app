@@ -1,71 +1,68 @@
-import 'dart:convert';
-
-Order brandFromJson(String str) {
-  final jsonData = json.decode(str);
-  return Order.fromMap(jsonData);
-}
+import 'basket.dart';
 
 class Order {
-  String mobile_id;
-  String basket;
-  String shop_addr;
-  String shop_name;
-  String shop_phone;
-  String shop_bin;
-  String latitude;
-  String longitude;
-  int price;
+  int id = 0;
+  int orderId = 0;
   int status = 0;
-  String time = '';
-  int return_price;
+  List<Basket> basket = [];
+  String deliveryAt = '';
+  String storeName = '';
+  int storeId = 0;
+  String storeAddress = '';
+  double totalCost = 0;
+  double totalReturnsCost = 0;
+  String counterpartyName = '';
+  int bonusGameSum = 0;
 
   Order({
-    required this.mobile_id,
-    required this.basket,
-    required this.shop_addr,
-    required this.shop_name,
-    required this.shop_phone,
-    required this.shop_bin,
-    required this.latitude,
-    required this.longitude,
-    required this.price,
+    required this.id,
+    required this.orderId,
     required this.status,
-    required this.time,
-    required this.return_price,
+    required this.basket,
+    required this.deliveryAt,
+    required this.storeName,
+    required this.storeId,
+    required this.storeAddress,
+    required this.totalCost,
+    required this.totalReturnsCost,
+    required this.counterpartyName,
+    required this.bonusGameSum
   });
 
-  factory Order.fromMap(Map<String, dynamic> json) => Order(
-    mobile_id: json["mobile_id"],
-    basket: json["basket"],
-    shop_addr: json["shop_addr"],
-    shop_name: json["shop_name"],
-    shop_phone: json["shop_phone"],
-    shop_bin: json["shop_name"],
-    latitude: json["latitude"],
-    longitude: json["longitude"],
-    price: json["price"],
-    status: json["status"] ?? 0,
-    time: json["time"],
-    return_price: json["return_price"],
-  );
+  Order.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    orderId = json['order_id'];
+    status = json['status'];
+    if (json['basket'] != null) {
+      basket = <Basket>[];
+      json['basket'].forEach((v) {
+        basket.add(Basket.fromJson(v));
+      });
+    }
+    deliveryAt = json['delivery_at'];
+    storeName = json['store_name'];
+    storeId = json['store_id'];
+    storeAddress = json['store_address'];
+    totalCost = double.parse(json['total_cost'].toString());
+    totalReturnsCost = double.parse(json['total_returns_cost'].toString());
+    counterpartyName = json['counterparty_name'];
+    bonusGameSum = json['bonus_game_sum'];
+  }
 
-  Map<String, dynamic> toMap() => {
-    "mobile_id": mobile_id,
-    "basket": basket,
-    "shop_addr": shop_addr,
-    "shop_name": shop_name,
-    "shop_phone": shop_phone,
-    "shop_bin": shop_bin,
-    "latitude": latitude,
-    "longitude": longitude,
-    "price": price,
-    "status": status,
-    "time": time,
-    "return_price": return_price,
-  };
-}
-
-String brandToJson(Order data) {
-  final dyn = data.toMap();
-  return json.encode(dyn);
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['order_id'] = orderId;
+    data['status'] = status;
+    data['basket'] = basket.map((v) => v.toJson()).toList();
+    data['delivery_at'] = deliveryAt;
+    data['store_name'] = storeName;
+    data['store_id'] = storeId;
+    data['store_address'] = storeAddress;
+    data['total_cost'] = totalCost;
+    data['total_returns_cost'] = totalReturnsCost;
+    data['counterparty_name'] = counterpartyName;
+    data['bonus_game_sum'] = bonusGameSum;
+    return data;
+  }
 }
