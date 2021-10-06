@@ -1,8 +1,10 @@
+import 'dart:convert';
+import 'package:connectivity/connectivity.dart';
 import 'package:boszhan_delivery_app/components/order_card.dart';
 import 'package:boszhan_delivery_app/models/order.dart';
-import 'package:boszhan_delivery_app/services/orders_api_provider.dart';
 import 'package:boszhan_delivery_app/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CurrentOrdersPage extends StatefulWidget {
 
@@ -47,32 +49,41 @@ class _CurrentOrdersPageState extends State<CurrentOrdersPage> {
   }
 
   void getOrders() async {
-    Future<Map<String, dynamic>> response = OrdersProvider().getDeliveryOrders();
-    Map<String, dynamic> responseData = {};
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      downloadData();
+    } else if (connectivityResult == ConnectivityResult.wifi) {
+      downloadData();
+    }
+    else{
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Соединение с интернетом отсутствует.", style: TextStyle(fontSize: 20)),
+      ));
+    }
 
-    response.then((value) {
+
+  }
+
+  void downloadData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('DownloadedData') != null){
+      List<dynamic> downloadedData = jsonDecode(prefs.getString('DownloadedData')!);
+      List<Order> list = <Order>[];
+
+      for (Map<String, dynamic> i in downloadedData){
+        Order order = Order.fromJson(i);
+        list.add(order);
+      }
+
       setState(() {
-        responseData = value;
+        orders = list;
+        orderCount = list.length;
       });
-    }).whenComplete((){
-      if (responseData['data'] != 'Error'){
-        List<Order> list = <Order>[];
-
-        for (Map<String, dynamic> i in responseData['data']){
-          Order order = Order.fromJson(i);
-          list.add(order);
-        }
-
-        setState(() {
-          orders = list;
-          orderCount = list.length;
-        });
-      }
-      else{
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
-        ));
-      }
-    });
+    }
+    else{
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Загрузите данные.", style: TextStyle(fontSize: 20)),
+      ));
+    }
   }
 }

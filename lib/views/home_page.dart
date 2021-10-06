@@ -1,8 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:boszhan_delivery_app/models/order.dart';
+import 'package:boszhan_delivery_app/services/orders_api_provider.dart';
 import 'package:boszhan_delivery_app/views/currentPage/current_orders_page.dart';
 import 'package:boszhan_delivery_app/views/historyPage/orders_history_page.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   // HomePage(this.product);
@@ -16,6 +21,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    downloadAction();
     super.initState();
   }
 
@@ -104,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                   child: ElevatedButton(
                     child: const Text("ЗАГРУЗИТЬ"),
                     onPressed: (){
-                      print("Clicked!");
+                      downloadAction();
                     },
                     style: ElevatedButton.styleFrom(
                       primary: Colors.blue,
@@ -119,5 +125,49 @@ class _HomePageState extends State<HomePage> {
           ),
         )
     );
+  }
+
+  void downloadAction() async{
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      downloadProcess();
+    } else if (connectivityResult == ConnectivityResult.wifi) {
+      downloadProcess();
+    }
+    else{
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Соединение с интернетом отсутствует.", style: TextStyle(fontSize: 20)),
+      ));
+    }
+  }
+
+  void downloadProcess() async{
+    Future<Map<String, dynamic>> response = OrdersProvider().getDeliveryOrders();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> responseData = {};
+
+    response.then((value) {
+      setState(() {
+        responseData = value;
+      });
+    }).whenComplete((){
+      if (responseData['data'] != 'Error'){
+        List<Order> list = <Order>[];
+
+        for (Map<String, dynamic> i in responseData['data']){
+          Order order = Order.fromJson(i);
+          list.add(order);
+        }
+
+        var jsonString = jsonEncode(responseData['data']);
+        prefs.setString('DownloadedData', jsonString);
+
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
+        ));
+      }
+    });
   }
 }
