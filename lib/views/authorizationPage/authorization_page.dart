@@ -1,9 +1,11 @@
-import 'package:boszhan_delivery_app/services/api.dart';
+import 'package:boszhan_delivery_app/services/login_api_provider.dart';
+import 'package:http/http.dart' as http;
 import 'package:boszhan_delivery_app/views/home_page.dart';
 import 'package:boszhan_delivery_app/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -117,9 +119,13 @@ class _LoginPageState extends State<LoginPage> {
 
   void login() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response = await Api().login(emailController.text, passwordController.text);
-    print(response);
-    if (response != null){
+    var response = await LoginProvider().login(emailController.text, passwordController.text);
+
+    // TODO: Действие при авторизации пользователя...
+
+    // print(response);
+
+    if (response != 'Error'){
       prefs.setString("token", response['token']);
       prefs.setInt("user_id", response['user']['id']);
       prefs.setString("full_name", response['user']['full_name']);
@@ -127,13 +133,12 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
     }
     else{
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
       ));
     }
     // await StoreRepository().saveAllStores(response['user']['id']);
     // var testStores = await DBProvider.db.getAllStores();
-
 
 
   }
