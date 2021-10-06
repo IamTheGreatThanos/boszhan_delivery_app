@@ -1,19 +1,18 @@
 import 'package:boszhan_delivery_app/components/product_card.dart';
+import 'package:boszhan_delivery_app/models/basket.dart';
 import 'package:boszhan_delivery_app/widgets/app_bar.dart';
-import 'package:boszhan_delivery_app/widgets/elevated_button_icon.dart';
 import 'package:flutter/material.dart';
 
 class OrderInfoPage extends StatefulWidget {
-  // OrderInfoPage(this.product);
-  // final Product product;
+  const OrderInfoPage(this.baskets, this.totalCost);
+  final List<Basket> baskets;
+  final double totalCost;
 
   @override
   _OrderInfoPageState createState() => _OrderInfoPageState();
 }
 
 class _OrderInfoPageState extends State<OrderInfoPage> {
-
-  List<String> products = ['asdf','asdf'];
 
   @override
   void initState() {
@@ -39,8 +38,8 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
           children: [
             Container(
               height: MediaQuery.of(context).size.height*0.75,
-              child: ListView.separated(itemCount: products.length,
-                  itemBuilder: (BuildContext context, int index) => index % 2 == 0 ? const ProductCard() : Ink(color: Colors.red[50], child: const ProductCard()),
+              child: ListView.separated(itemCount: widget.baskets.length,
+                  itemBuilder: (BuildContext context, int index) => widget.baskets[index].type == 0 ? ProductCard(widget.baskets[index]) : Ink(color: Colors.red[50], child: ProductCard(widget.baskets[index])),
                   separatorBuilder: (context, index){
                     return const Divider();
                   }
@@ -105,13 +104,13 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                 ),
               ]
             ),
-            const Padding(
-              padding: EdgeInsets.all(10),
-              child: Text('Общая сумма заказа: 20078', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text('Общая сумма заказа: ' + widget.totalCost.toString() + ' ₸', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ),
-            const Padding(
-              padding: EdgeInsets.all(10),
-              child: Text('Общее количество заказов: 25', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text('Общее количество заказов: ' + widget.baskets.length.toString(), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ),
           ],
         ),

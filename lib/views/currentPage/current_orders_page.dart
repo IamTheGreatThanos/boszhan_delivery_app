@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:boszhan_delivery_app/components/order_card.dart';
 import 'package:boszhan_delivery_app/models/order.dart';
 import 'package:boszhan_delivery_app/services/orders_api_provider.dart';
@@ -39,7 +37,7 @@ class _CurrentOrdersPageState extends State<CurrentOrdersPage> {
             child: buildAppBar('Текущие заказы')
         ),
         body: ListView.separated(itemCount: orderCount,
-            itemBuilder: (BuildContext context, int index) => OrderCard(),
+            itemBuilder: (BuildContext context, int index) => OrderCard(orders[index]),
             separatorBuilder: (context, index){
               return Divider();
             }

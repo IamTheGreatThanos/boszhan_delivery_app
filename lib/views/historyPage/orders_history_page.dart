@@ -1,5 +1,6 @@
 import 'package:boszhan_delivery_app/components/history_order_card.dart';
 import 'package:boszhan_delivery_app/components/order_card.dart';
+import 'package:boszhan_delivery_app/models/order.dart';
 import 'package:boszhan_delivery_app/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ class OrdersHistoryPage extends StatefulWidget {
 
 class _OrdersHistoryPageState extends State<OrdersHistoryPage> {
 
-  List<String> orders = ['asdf','asdf'];
+  List<Order> orders = <Order>[];
 
   @override
   void initState() {
@@ -36,7 +37,7 @@ class _OrdersHistoryPageState extends State<OrdersHistoryPage> {
               child: buildAppBar('Выполненные заказы')
           ),
           body: ListView.separated(itemCount: orders.length,
-              itemBuilder: (BuildContext context, int index) => HistoryOrderCard(),
+              itemBuilder: (BuildContext context, int index) => HistoryOrderCard(orders[index]),
               separatorBuilder: (context, index){
                 return Divider();
               }

@@ -1,23 +1,23 @@
+import 'package:boszhan_delivery_app/models/basket.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget{
-  const ProductCard();
-  // final Entry entry;
+  const ProductCard(this.basket);
+  final Basket basket;
 
   @override
   Widget build(BuildContext context) {
-    // return _buildTiles(entry);
     return ListTile(
       leading: const CircleAvatar(
         backgroundColor: Colors.grey,
         child: Icon(Icons.location_pin, color: Colors.white,)
       ),
-      title: const Text('Сосиска к ужину', style: TextStyle(fontSize: 20),),
+      title: Text(basket.name, style: TextStyle(fontSize: 20),),
       subtitle: Row(
-        children: const [
-          Text('Количество: 1', style: TextStyle(fontSize: 18)),
+        children: [
+          Text('Количество: ' + basket.count.toString(), style: TextStyle(fontSize: 18)),
           Spacer(),
-          Text('Сумма: 380.0 ', style: TextStyle(fontSize: 18))
+          Text('Сумма:  ' + basket.price.toString() + ' ₸', style: TextStyle(fontSize: 18))
         ],
       ),
       onTap: (){}

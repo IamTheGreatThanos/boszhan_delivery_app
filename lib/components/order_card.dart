@@ -1,19 +1,20 @@
+import 'package:boszhan_delivery_app/models/order.dart';
 import 'package:boszhan_delivery_app/views/currentPage/order_info_page.dart';
 import 'package:flutter/material.dart';
 
 class OrderCard extends StatelessWidget{
-  const OrderCard();
-  // final Entry entry;
+  const OrderCard(this.order);
+  final Order order;
 
   @override
   Widget build(BuildContext context) {
-    // return _buildTiles(entry);
     return ListTile(
       leading: const CircleAvatar(
         backgroundColor: Colors.grey,
         child: Icon(Icons.location_pin, color: Colors.white,)
       ),
-      title: const Text("Название: Чудо,    Адрес: Жаскент 14/1", style: TextStyle(fontSize: 20)),
+      title: Text('Название: ' + order.storeName, style: const TextStyle(fontSize: 20)),
+      subtitle: Text('Адрес: ' + order.storeAddress, style: const TextStyle(fontSize: 20)),
       trailing: const Icon(Icons.keyboard_arrow_right),
       onTap: (){
         showModalBottomSheet(
@@ -43,7 +44,7 @@ class OrderCard extends StatelessWidget{
                         icon: const Icon(Icons.open_in_full, color: Colors.white),
                         label: const Text("ОТКРЫТЬ ЗАКАЗ"),
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => OrderInfoPage()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => OrderInfoPage(order.basket, order.totalCost)));
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.green,
