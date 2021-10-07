@@ -19,7 +19,7 @@
               android:resource="@style/NormalTheme"
               />
             <meta-data android:name="com.google.android.geo.API_KEY"
-                android:value="YOUR KEY HERE"/>
+                android:value="AIzaSyBtZ_IY_iL0T3MnBte0-erCi9bNI8zBLg8"/>
             <!-- Displays an Android View that continues showing the launch screen
                  Drawable until Flutter paints its first frame, then this splash
                  screen fades out. A splash screen is useful to avoid any visual
