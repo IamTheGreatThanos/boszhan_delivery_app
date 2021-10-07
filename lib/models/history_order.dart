@@ -3,6 +3,7 @@ import 'history_basket.dart';
 
 class HistoryOrder {
   String name = '';
+  String storeAddress = '';
   int id = 0;
   int userId = 0;
   String deliveryTime = '';
@@ -19,10 +20,10 @@ class HistoryOrder {
   bool dogovor = false;
   String bin = '';
   int priceCategory = 0;
-  int laravelThroughKey = 0;
 
   HistoryOrder({
     required this.name,
+    required this.storeAddress,
     required this.id,
     required this.userId,
     required this.deliveryTime,
@@ -39,11 +40,11 @@ class HistoryOrder {
     required this.dogovor,
     required this.bin,
     required this.priceCategory,
-    required this.laravelThroughKey
   });
 
   HistoryOrder.fromJson(Map<String, dynamic> json) {
     name = json['store_name'];
+    storeAddress = json['store_address'];
     id = json['id'];
     userId = json['user_id'];
     deliveryTime = json['delivery_time'];
@@ -66,12 +67,12 @@ class HistoryOrder {
     dogovor = json['dogovor'];
     bin = json['bin'];
     priceCategory = json['priceCategory'];
-    laravelThroughKey = json['laravel_through_key'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['store_name'] = name;
+    data['store_address'] = storeAddress;
     data['id'] = id;
     data['user_id'] = userId;
     data['delivery_time'] = deliveryTime;
@@ -88,7 +89,6 @@ class HistoryOrder {
     data['dogovor'] = dogovor;
     data['bin'] = bin;
     data['priceCategory'] = priceCategory;
-    data['laravel_through_key'] = laravelThroughKey;
     return data;
   }
 }

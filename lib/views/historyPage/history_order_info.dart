@@ -13,8 +13,6 @@ class HistoryOrderInfoPage extends StatefulWidget {
 
 class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
 
-  List<String> products = ['asdf','asdf'];
-
   @override
   void initState() {
     super.initState();
@@ -22,39 +20,17 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
-
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
-        child: Scaffold(
-          appBar: PreferredSize(
-              preferredSize: Size.fromHeight(60.0),
-              child: buildAppBar('Просмотр заказа')
-          ),
-          body: ListView.separated(itemCount: products.length,
-            itemBuilder: (BuildContext context, int index) => index % 2 == 0 ? HistoryProductCard(widget.baskets[index]) : Ink(color: Colors.red[50], child: HistoryProductCard(widget.baskets[index])),
-            separatorBuilder: (context, index){
-              return const Divider();
-            }
-          )
-        )
+    return Scaffold(
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(60.0),
+          child: buildAppBar('Просмотр заказа')
+      ),
+      body: ListView.separated(itemCount: widget.baskets.length,
+        itemBuilder: (BuildContext context, int index) => index % 2 == 0 ? HistoryProductCard(widget.baskets[index]) : Ink(color: Colors.red[50], child: HistoryProductCard(widget.baskets[index])),
+        separatorBuilder: (context, index){
+          return const Divider();
+        }
+      )
     );
   }
-
-  void finishOrder(){
-    print('Finish');
-  }
-
-  void cancelOrder(){
-    print('Cancel');
-  }
-
-  void addToOrder(){
-    print('Add');
-  }
-
 }

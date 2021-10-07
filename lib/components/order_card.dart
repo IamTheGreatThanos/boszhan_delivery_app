@@ -1,5 +1,6 @@
 import 'package:boszhan_delivery_app/models/order.dart';
 import 'package:boszhan_delivery_app/views/currentPage/order_info_page.dart';
+import 'package:boszhan_delivery_app/views/map/map_page.dart';
 import 'package:flutter/material.dart';
 
 class OrderCard extends StatelessWidget{
@@ -62,7 +63,7 @@ class OrderCard extends StatelessWidget{
                         icon: const Icon(Icons.location_pin, color: Colors.white),
                         label: const Text("ПОКАЗАТЬ НА КАРТЕ"),
                         onPressed: (){
-                          // Navigator.push(context, MaterialPageRoute(builder: (context) => OrderInfoPage()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const MapPage()));
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.grey,
@@ -77,7 +78,7 @@ class OrderCard extends StatelessWidget{
                       width: 400,
                       height: 60,
                       child: ElevatedButton.icon(
-                        icon: Icon(Icons.print, color: Colors.white),
+                        icon: const Icon(Icons.print, color: Colors.white),
                         label: const Text("ПЕЧАТЬ"),
                         onPressed: (){
                           print('Printing');

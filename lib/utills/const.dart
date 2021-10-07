@@ -7,5 +7,5 @@ class AppColors {
 }
 
 class AppConstants {
-  static final String baseUrl = "https://192.168.5.30/";
+  static final String baseUrl = "http://192.168.5.30/";
 }
