@@ -1,18 +1,24 @@
 import 'package:boszhan_delivery_app/components/product_card.dart';
 import 'package:boszhan_delivery_app/models/basket.dart';
+import 'package:boszhan_delivery_app/services/change_status_api_provider.dart';
 import 'package:boszhan_delivery_app/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderInfoPage extends StatefulWidget {
-  const OrderInfoPage(this.baskets, this.totalCost);
+  const OrderInfoPage(this.baskets, this.totalCost, this.orderID);
   final List<Basket> baskets;
   final double totalCost;
+  final int orderID;
 
   @override
   _OrderInfoPageState createState() => _OrderInfoPageState();
 }
 
 class _OrderInfoPageState extends State<OrderInfoPage> {
+
+  TextEditingController commentController = TextEditingController();
+  TextEditingController paymentTypeController = TextEditingController();
 
   @override
   void initState() {
@@ -32,7 +38,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(60.0),
+          preferredSize: const Size.fromHeight(60.0),
           child: buildAppBar('Выдача заказа')
         ),
         body: Column(
@@ -58,7 +64,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                       icon: const Icon(Icons.assignment_rounded, color: Colors.white),
                       label: const Text('Выполнить'),
                       onPressed: () {
-                        finishOrder();
+                        displayPeymentTypeDialog(context);
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.green,
@@ -76,7 +82,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                       icon: const Icon(Icons.cancel, color: Colors.white),
                       label: const Text('Отказ'),
                       onPressed: () {
-                        cancelOrder();
+                        displayTextInputDialog(context);
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.red,
@@ -92,7 +98,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                     height: MediaQuery.of(context).size.width*0.1,
                     child: ElevatedButton.icon(
                       icon: const Icon(Icons.add_circle, color: Colors.white),
-                      label: const Text('Добавить'),
+                      label: const Text('Изменить'),
                       onPressed: () {
                         addToOrder();
                       },
@@ -119,15 +125,114 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
     );
   }
 
-  void finishOrder(){
-    print('Finish');
+
+  void finishOrder() async{
+    String status = '';
+    ChangeStatusProvider().changeStatus(widget.orderID.toString(), 4).then((value) => status = value).whenComplete((){
+      if (status == 'Success'){
+        Navigator.pop(context);
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
+        ));
+      }
+    });
+
   }
 
-  void cancelOrder(){
-    print('Cancel');
+  void cancelOrder() async{
+    String status = '';
+    ChangeStatusProvider().changeStatus(widget.orderID.toString(), 4).then((value) => status = value).whenComplete((){
+      if (status == 'Success'){
+        Navigator.pop(context);
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
+        ));
+      }
+    });
   }
 
   void addToOrder(){
     print('Add');
   }
+
+  Future<void> displayTextInputDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Комментарий'),
+          content: TextField(
+            controller: commentController,
+            decoration: const InputDecoration(hintText: "Введите причину"),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              color: Colors.red,
+              textColor: Colors.white,
+              child: const Text('Отмена'),
+              onPressed: () {
+                setState(() {
+                  Navigator.pop(context);
+                });
+              },
+            ),
+            FlatButton(
+              color: Colors.green,
+              textColor: Colors.white,
+              child: const Text('Сохранить'),
+              onPressed: () {
+                setState(() {
+                  print(commentController.text);
+                  Navigator.pop(context);
+                });
+              },
+            ),
+          ],
+        );
+      }
+    );
+  }
+
+  Future<void> displayPeymentTypeDialog(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Комментарий'),
+            content: TextField(
+              controller: paymentTypeController,
+              decoration: const InputDecoration(hintText: "Введите причину"),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                color: Colors.red,
+                textColor: Colors.white,
+                child: const Text('Отмена'),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              FlatButton(
+                color: Colors.green,
+                textColor: Colors.white,
+                child: const Text('Сохранить'),
+                onPressed: () {
+                  setState(() {
+                    finishOrder();
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          );
+        }
+    );
+  }
+
 }

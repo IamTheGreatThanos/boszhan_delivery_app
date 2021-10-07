@@ -19,6 +19,13 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController passwordController = TextEditingController();
 
   @override
+  void initState() {
+    emailController.text = 'isabekov@mail.kz';
+    passwordController.text = 'isabekov';
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(

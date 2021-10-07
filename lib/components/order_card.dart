@@ -45,7 +45,7 @@ class OrderCard extends StatelessWidget{
                         icon: const Icon(Icons.open_in_full, color: Colors.white),
                         label: const Text("ОТКРЫТЬ ЗАКАЗ"),
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => OrderInfoPage(order.basket, order.totalCost)));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => OrderInfoPage(order.basket, order.totalCost, order.orderId)));
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.green,
@@ -72,24 +72,24 @@ class OrderCard extends StatelessWidget{
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: SizedBox(
-                      width: 400,
-                      height: 60,
-                      child: ElevatedButton.icon(
-                        icon: const Icon(Icons.print, color: Colors.white),
-                        label: const Text("ПЕЧАТЬ"),
-                        onPressed: (){
-                          print('Printing');
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.blue,
-                          textStyle: const TextStyle(color: Colors.white,fontSize: 18),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(10),
+                  //   child: SizedBox(
+                  //     width: 400,
+                  //     height: 60,
+                  //     child: ElevatedButton.icon(
+                  //       icon: const Icon(Icons.print, color: Colors.white),
+                  //       label: const Text("ПЕЧАТЬ"),
+                  //       onPressed: (){
+                  //         print('Printing');
+                  //       },
+                  //       style: ElevatedButton.styleFrom(
+                  //         primary: Colors.blue,
+                  //         textStyle: const TextStyle(color: Colors.white,fontSize: 18),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             );
