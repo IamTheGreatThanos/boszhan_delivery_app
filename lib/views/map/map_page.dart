@@ -25,6 +25,9 @@ class MapPageState extends State<MapPage> {
       zoom: 19.151926040649414);
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(

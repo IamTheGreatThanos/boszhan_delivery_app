@@ -37,7 +37,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
         body: Column(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height*0.75,
+              height: MediaQuery.of(context).size.height*0.7,
               child: ListView.separated(itemCount: widget.baskets.length,
                   itemBuilder: (BuildContext context, int index) => widget.baskets[index].type == 0 ? ProductCard(widget.baskets[index]) : Ink(color: Colors.red[50], child: ProductCard(widget.baskets[index])),
                   separatorBuilder: (context, index){
