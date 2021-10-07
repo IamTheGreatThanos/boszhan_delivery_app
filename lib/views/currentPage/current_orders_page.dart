@@ -60,8 +60,6 @@ class _CurrentOrdersPageState extends State<CurrentOrdersPage> {
         content: Text("Соединение с интернетом отсутствует.", style: TextStyle(fontSize: 20)),
       ));
     }
-
-
   }
 
   void downloadData() async {

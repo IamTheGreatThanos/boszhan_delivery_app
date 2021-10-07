@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:boszhan_delivery_app/components/history_order_card.dart';
 import 'package:boszhan_delivery_app/components/order_card.dart';
+import 'package:boszhan_delivery_app/models/history_order.dart';
 import 'package:boszhan_delivery_app/models/order.dart';
 import 'package:boszhan_delivery_app/widgets/app_bar.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OrdersHistoryPage extends StatefulWidget {
   // OrdersHistoryPage(this.product);
@@ -14,10 +19,12 @@ class OrdersHistoryPage extends StatefulWidget {
 
 class _OrdersHistoryPageState extends State<OrdersHistoryPage> {
 
-  List<Order> orders = <Order>[];
+  List<HistoryOrder> orders = <HistoryOrder>[];
+  int orderCount = 0;
 
   @override
   void initState() {
+    getOrders();
     super.initState();
   }
 
@@ -36,7 +43,7 @@ class _OrdersHistoryPageState extends State<OrdersHistoryPage> {
               preferredSize: Size.fromHeight(60.0),
               child: buildAppBar('Выполненные заказы')
           ),
-          body: ListView.separated(itemCount: orders.length,
+          body: ListView.separated(itemCount: orderCount,
               itemBuilder: (BuildContext context, int index) => HistoryOrderCard(orders[index]),
               separatorBuilder: (context, index){
                 return Divider();
@@ -45,4 +52,44 @@ class _OrdersHistoryPageState extends State<OrdersHistoryPage> {
         )
     );
   }
+
+
+  void getOrders() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      downloadData();
+    } else if (connectivityResult == ConnectivityResult.wifi) {
+      downloadData();
+    }
+    else{
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Соединение с интернетом отсутствует.", style: TextStyle(fontSize: 20)),
+      ));
+    }
+  }
+
+  void downloadData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('DownloadedHistoryData') != null){
+      List<dynamic> downloadedData = jsonDecode(prefs.getString('DownloadedHistoryData')!);
+      List<HistoryOrder> list = <HistoryOrder>[];
+
+      for (Map<String, dynamic> i in downloadedData){
+        HistoryOrder order = HistoryOrder.fromJson(i);
+        list.add(order);
+      }
+
+      setState(() {
+        orders = list;
+        orderCount = list.length;
+      });
+    }
+    else{
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Загрузите данные.", style: TextStyle(fontSize: 20)),
+      ));
+    }
+  }
+
+
 }

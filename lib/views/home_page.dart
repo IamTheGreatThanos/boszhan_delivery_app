@@ -1,12 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
+import 'package:boszhan_delivery_app/models/history_order.dart';
 import 'package:boszhan_delivery_app/models/order.dart';
+import 'package:boszhan_delivery_app/services/history_api_provider.dart';
 import 'package:boszhan_delivery_app/services/orders_api_provider.dart';
 import 'package:boszhan_delivery_app/views/currentPage/current_orders_page.dart';
 import 'package:boszhan_delivery_app/views/historyPage/orders_history_page.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -131,8 +131,10 @@ class _HomePageState extends State<HomePage> {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile) {
       downloadProcess();
+      downloadProcessForHistory();
     } else if (connectivityResult == ConnectivityResult.wifi) {
       downloadProcess();
+      downloadProcessForHistory();
     }
     else{
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -152,15 +154,39 @@ class _HomePageState extends State<HomePage> {
       });
     }).whenComplete((){
       if (responseData['data'] != 'Error'){
-        List<Order> list = <Order>[];
+
+        var jsonString = jsonEncode(responseData['data']);
+        prefs.setString('DownloadedData', jsonString);
+
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
+        ));
+      }
+    });
+  }
+
+  void downloadProcessForHistory() async{
+    Future<Map<String, dynamic>> response = HistoryProvider().getDeliveredOrders();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> responseData = {};
+
+    response.then((value) {
+      setState(() {
+        responseData = value;
+      });
+    }).whenComplete((){
+      if (responseData['data'] != 'Error'){
+        List<HistoryOrder> list = <HistoryOrder>[];
 
         for (Map<String, dynamic> i in responseData['data']){
-          Order order = Order.fromJson(i);
+          HistoryOrder order = HistoryOrder.fromJson(i);
           list.add(order);
         }
 
         var jsonString = jsonEncode(responseData['data']);
-        prefs.setString('DownloadedData', jsonString);
+        prefs.setString('DownloadedHistoryData', jsonString);
 
       }
       else{
