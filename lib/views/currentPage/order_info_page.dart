@@ -30,6 +30,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
         }
       },
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(60.0),
           child: buildAppBar('Выдача заказа')

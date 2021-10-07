@@ -26,7 +26,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
           child: buildAppBar('Просмотр заказа')
       ),
       body: ListView.separated(itemCount: widget.baskets.length,
-        itemBuilder: (BuildContext context, int index) => index % 2 == 0 ? HistoryProductCard(widget.baskets[index]) : Ink(color: Colors.red[50], child: HistoryProductCard(widget.baskets[index])),
+        itemBuilder: (BuildContext context, int index) => widget.baskets[index].type == 0 ? HistoryProductCard(widget.baskets[index]) : Ink(color: Colors.red[50], child: HistoryProductCard(widget.baskets[index])),
         separatorBuilder: (context, index){
           return const Divider();
         }
