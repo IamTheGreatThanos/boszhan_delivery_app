@@ -1,9 +1,7 @@
 import 'dart:convert';
 
 import 'package:boszhan_delivery_app/components/history_order_card.dart';
-import 'package:boszhan_delivery_app/components/order_card.dart';
 import 'package:boszhan_delivery_app/models/history_order.dart';
-import 'package:boszhan_delivery_app/models/order.dart';
 import 'package:boszhan_delivery_app/widgets/app_bar.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
