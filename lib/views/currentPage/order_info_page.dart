@@ -5,6 +5,8 @@ import 'package:boszhan_delivery_app/widgets/app_bar.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 
+import '../home_page.dart';
+
 class OrderInfoPage extends StatefulWidget {
   const OrderInfoPage(this.order);
   final Order order;
@@ -175,11 +177,11 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                   var connectivityResult = await (Connectivity().checkConnectivity());
                   if (connectivityResult == ConnectivityResult.mobile) {
                     setState(() {
-                      _value != 3 ? finishOrder(5,int.parse(_value.toString())) : finishOrder(3,int.parse(_value.toString()));
+                      _value != 3 ? finishOrder(3,int.parse(_value.toString())) : finishOrder(5,int.parse(_value.toString()));
                     });
                   } else if (connectivityResult == ConnectivityResult.wifi) {
                     setState(() {
-                      _value != 3 ? finishOrder(5,int.parse(_value.toString())) : finishOrder(3,int.parse(_value.toString()));
+                      _value != 3 ? finishOrder(3,int.parse(_value.toString())) : finishOrder(5,int.parse(_value.toString()));
                     });
                   }
                   else{
@@ -246,20 +248,17 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
 
   void finishOrder(int statusType, int paymentType) async{
     String status = '';
-    OrdersProvider().changePaymentType(widget.order.orderId.toString(), paymentType).whenComplete((){
-      OrdersProvider().changeStatus(widget.order.orderId.toString(), statusType).then((value) => status = value).whenComplete((){
-        if (status == 'Success'){
-          setState(() {
-            isButtonDisabled = true;
-          });
-          Navigator.pop(context);
-        }
-        else{
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
-          ));
-        }
-      });
+    OrdersProvider().changePaymentType(widget.order.orderId.toString(), paymentType).then((value) => status = value).whenComplete((){
+      if (status == 'Success'){
+        Navigator.pushAndRemoveUntil<dynamic>(context, MaterialPageRoute<dynamic>(
+          builder: (BuildContext context) => HomePage(),
+        ), (route) => false);
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
+        ));
+      }
     });
 
 
@@ -269,10 +268,9 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
     String status = '';
     OrdersProvider().reject(widget.order.orderId.toString(), commentController.text).then((value) => status = value).whenComplete((){
       if (status == 'Success'){
-        setState(() {
-          isButtonDisabled = true;
-        });
-        Navigator.pop(context);
+        Navigator.pushAndRemoveUntil<dynamic>(context, MaterialPageRoute<dynamic>(
+            builder: (BuildContext context) => HomePage(),
+          ), (route) => false);
       }
       else{
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
