@@ -15,7 +15,7 @@ class ProductCard extends StatelessWidget{
       title: Text(basket.name, style: TextStyle(fontSize: 20),),
       subtitle: Row(
         children: [
-          Text('Количество: ' + basket.count.toString(), style: TextStyle(fontSize: 18)),
+          Text('Количество: ' + basket.count.toString() + (basket.measureId == 1 ? ' шт' : ' кг'), style: TextStyle(fontSize: 18)),
           Spacer(),
           Text('Сумма:  ' + basket.price.toString() + ' ₸', style: TextStyle(fontSize: 18))
         ],

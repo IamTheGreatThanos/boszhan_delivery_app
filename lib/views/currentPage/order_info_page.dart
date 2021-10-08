@@ -1,10 +1,9 @@
 import 'package:boszhan_delivery_app/components/product_card.dart';
-import 'package:boszhan_delivery_app/models/basket.dart';
 import 'package:boszhan_delivery_app/models/order.dart';
-import 'package:boszhan_delivery_app/services/change_status_api_provider.dart';
+import 'package:boszhan_delivery_app/services/orders_api_provider.dart';
 import 'package:boszhan_delivery_app/widgets/app_bar.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderInfoPage extends StatefulWidget {
   const OrderInfoPage(this.order);
@@ -38,6 +37,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
         }
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(60.0),
@@ -47,7 +47,8 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
           children: [
             Container(
               height: MediaQuery.of(context).size.height*0.7,
-              child: ListView.separated(itemCount: widget.order.basket.length,
+              child: ListView.separated(
+                  itemCount: widget.order.basket.length,
                   itemBuilder: (BuildContext context, int index) => widget.order.basket[index].type == 0 ? ProductCard(widget.order.basket[index]) : Ink(color: Colors.red[50], child: ProductCard(widget.order.basket[index])),
                   separatorBuilder: (context, index){
                     return const Divider();
@@ -170,11 +171,22 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                 color: Colors.green,
                 textColor: Colors.white,
                 child: const Text('Сохранить'),
-                onPressed: () {
-                  setState(() {
-                    finishOrder();
-                    Navigator.pop(context);
-                  });
+                onPressed: () async {
+                  var connectivityResult = await (Connectivity().checkConnectivity());
+                  if (connectivityResult == ConnectivityResult.mobile) {
+                    setState(() {
+                      _value != 3 ? finishOrder(5,int.parse(_value.toString())) : finishOrder(3,int.parse(_value.toString()));
+                    });
+                  } else if (connectivityResult == ConnectivityResult.wifi) {
+                    setState(() {
+                      _value != 3 ? finishOrder(5,int.parse(_value.toString())) : finishOrder(3,int.parse(_value.toString()));
+                    });
+                  }
+                  else{
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Соединение с интернетом отсутствует.", style: TextStyle(fontSize: 20)),
+                    ));
+                  }
                 },
               ),
             ],
@@ -208,10 +220,22 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                 color: Colors.green,
                 textColor: Colors.white,
                 child: const Text('Сохранить'),
-                onPressed: () {
-                  setState(() {
-                    Navigator.pop(context);
-                  });
+                onPressed: () async {
+                  var connectivityResult = await (Connectivity().checkConnectivity());
+                  if (connectivityResult == ConnectivityResult.mobile) {
+                    setState(() {
+                      cancelOrder();
+                    });
+                  } else if (connectivityResult == ConnectivityResult.wifi) {
+                    setState(() {
+                      cancelOrder();
+                    });
+                  }
+                  else{
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Соединение с интернетом отсутствует.", style: TextStyle(fontSize: 20)),
+                    ));
+                  }
                 },
               ),
             ],
@@ -220,24 +244,34 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
     );
   }
 
-  void finishOrder() async{
+  void finishOrder(int statusType, int paymentType) async{
     String status = '';
-    ChangeStatusProvider().changeStatus(widget.order.orderId.toString(), 5).then((value) => status = value).whenComplete((){
-      if (status == 'Success'){
-        Navigator.pop(context);
-      }
-      else{
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
-        ));
-      }
+    OrdersProvider().changePaymentType(widget.order.orderId.toString(), paymentType).whenComplete((){
+      OrdersProvider().changeStatus(widget.order.orderId.toString(), statusType).then((value) => status = value).whenComplete((){
+        if (status == 'Success'){
+          setState(() {
+            isButtonDisabled = true;
+          });
+          Navigator.pop(context);
+        }
+        else{
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
+          ));
+        }
+      });
     });
+
+
   }
 
   void cancelOrder() async{
     String status = '';
-    ChangeStatusProvider().changeStatus(widget.order.orderId.toString(), 4).then((value) => status = value).whenComplete((){
+    OrdersProvider().reject(widget.order.orderId.toString(), commentController.text).then((value) => status = value).whenComplete((){
       if (status == 'Success'){
+        setState(() {
+          isButtonDisabled = true;
+        });
         Navigator.pop(context);
       }
       else{
