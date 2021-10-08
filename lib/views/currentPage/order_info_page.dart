@@ -1,15 +1,14 @@
 import 'package:boszhan_delivery_app/components/product_card.dart';
 import 'package:boszhan_delivery_app/models/basket.dart';
+import 'package:boszhan_delivery_app/models/order.dart';
 import 'package:boszhan_delivery_app/services/change_status_api_provider.dart';
 import 'package:boszhan_delivery_app/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderInfoPage extends StatefulWidget {
-  const OrderInfoPage(this.baskets, this.totalCost, this.orderID);
-  final List<Basket> baskets;
-  final double totalCost;
-  final int orderID;
+  const OrderInfoPage(this.order);
+  final Order order;
 
   @override
   _OrderInfoPageState createState() => _OrderInfoPageState();
@@ -18,10 +17,13 @@ class OrderInfoPage extends StatefulWidget {
 class _OrderInfoPageState extends State<OrderInfoPage> {
 
   TextEditingController commentController = TextEditingController();
-  TextEditingController paymentTypeController = TextEditingController();
+  Object? _value = 1;
+  bool isButtonDisabled = false;
 
   @override
   void initState() {
+    print(widget.order.status);
+    widget.order.status != 2 ? isButtonDisabled = true : isButtonDisabled = false;
     super.initState();
   }
 
@@ -45,8 +47,8 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
           children: [
             Container(
               height: MediaQuery.of(context).size.height*0.7,
-              child: ListView.separated(itemCount: widget.baskets.length,
-                  itemBuilder: (BuildContext context, int index) => widget.baskets[index].type == 0 ? ProductCard(widget.baskets[index]) : Ink(color: Colors.red[50], child: ProductCard(widget.baskets[index])),
+              child: ListView.separated(itemCount: widget.order.basket.length,
+                  itemBuilder: (BuildContext context, int index) => widget.order.basket[index].type == 0 ? ProductCard(widget.order.basket[index]) : Ink(color: Colors.red[50], child: ProductCard(widget.order.basket[index])),
                   separatorBuilder: (context, index){
                     return const Divider();
                   }
@@ -63,9 +65,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                     child: ElevatedButton.icon(
                       icon: const Icon(Icons.assignment_rounded, color: Colors.white),
                       label: const Text('Выполнить'),
-                      onPressed: () {
-                        displayPeymentTypeDialog(context);
-                      },
+                      onPressed: isButtonDisabled ? null : displayPaymentTypeDialog,
                       style: ElevatedButton.styleFrom(
                         primary: Colors.green,
                         textStyle: const TextStyle(color: Colors.white,fontSize: 20),
@@ -81,9 +81,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                     child: ElevatedButton.icon(
                       icon: const Icon(Icons.cancel, color: Colors.white),
                       label: const Text('Отказ'),
-                      onPressed: () {
-                        displayTextInputDialog(context);
-                      },
+                      onPressed: isButtonDisabled ? null : displayTextInputDialog,
                       style: ElevatedButton.styleFrom(
                         primary: Colors.red,
                         textStyle: const TextStyle(color: Colors.white,fontSize: 20),
@@ -99,9 +97,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                     child: ElevatedButton.icon(
                       icon: const Icon(Icons.add_circle, color: Colors.white),
                       label: const Text('Изменить'),
-                      onPressed: () {
-                        addToOrder();
-                      },
+                      onPressed: isButtonDisabled ? null : addToOrder,
                       style: ElevatedButton.styleFrom(
                         primary: Colors.blue,
                         textStyle: const TextStyle(color: Colors.white,fontSize: 20),
@@ -113,11 +109,11 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
             ),
             Padding(
               padding: const EdgeInsets.all(10),
-              child: Text('Общая сумма заказа: ' + widget.totalCost.toString() + ' ₸', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              child: Text('Общая сумма заказа: ' + widget.order.totalCost.toString() + ' ₸', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ),
             Padding(
               padding: const EdgeInsets.all(10),
-              child: Text('Общее количество заказов: ' + widget.baskets.length.toString(), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              child: Text('Общее количество заказов: ' + widget.order.basket.length.toString(), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ),
           ],
         ),
@@ -128,7 +124,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
 
   void finishOrder() async{
     String status = '';
-    ChangeStatusProvider().changeStatus(widget.orderID.toString(), 4).then((value) => status = value).whenComplete((){
+    ChangeStatusProvider().changeStatus(widget.order.orderId.toString(), 5).then((value) => status = value).whenComplete((){
       if (status == 'Success'){
         Navigator.pop(context);
       }
@@ -138,12 +134,11 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
         ));
       }
     });
-
   }
 
   void cancelOrder() async{
     String status = '';
-    ChangeStatusProvider().changeStatus(widget.orderID.toString(), 4).then((value) => status = value).whenComplete((){
+    ChangeStatusProvider().changeStatus(widget.order.orderId.toString(), 4).then((value) => status = value).whenComplete((){
       if (status == 'Success'){
         Navigator.pop(context);
       }
@@ -159,7 +154,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
     print('Add');
   }
 
-  Future<void> displayTextInputDialog(BuildContext context) async {
+  Future<void> displayTextInputDialog() async {
     return showDialog(
       context: context,
       builder: (context) {
@@ -186,7 +181,6 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
               child: const Text('Сохранить'),
               onPressed: () {
                 setState(() {
-                  print(commentController.text);
                   Navigator.pop(context);
                 });
               },
@@ -197,15 +191,39 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
     );
   }
 
-  Future<void> displayPeymentTypeDialog(BuildContext context) async {
+  Future<void> displayPaymentTypeDialog() async {
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Комментарий'),
-            content: TextField(
-              controller: paymentTypeController,
-              decoration: const InputDecoration(hintText: "Введите причину"),
+            title: const Text('Выберите способ оплаты'),
+            content: SizedBox(
+              height: 60,
+              child: DropdownButton(
+                value: _value,
+                items: const [
+                  DropdownMenuItem(
+                    child: Text("Наличный"),
+                    value: 1,
+                  ),
+                  DropdownMenuItem(
+                    child: Text("Без наличный"),
+                    value: 2,
+                  ),
+                  DropdownMenuItem(
+                    child: Text("Рассрочка платежа"),
+                    value: 3,
+                  )
+                ],
+                onChanged: (value){
+                  setState((){
+                    _value = value;
+                    Navigator.pop(context);
+                    displayPaymentTypeDialog();
+                  });
+                },
+                hint:const Text("Select item")
+              )
             ),
             actions: <Widget>[
               FlatButton(

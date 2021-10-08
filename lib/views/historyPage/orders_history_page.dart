@@ -41,9 +41,9 @@ class _OrdersHistoryPageState extends State<OrdersHistoryPage> {
               child: buildAppBar('Выполненные заказы')
           ),
           body: ListView.separated(itemCount: orderCount,
-              itemBuilder: (BuildContext context, int index) => HistoryOrderCard(orders[index]),
+              itemBuilder: (BuildContext context, int index) => orders[index].status == 3 ? HistoryOrderCard(orders[index]) : Ink(color: Colors.red[50], child: HistoryOrderCard(orders[index])),
               separatorBuilder: (context, index){
-                return Divider();
+                return const Divider();
               }
           ),
         )

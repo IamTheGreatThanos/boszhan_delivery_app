@@ -1,10 +1,10 @@
 import 'package:boszhan_delivery_app/components/history_product_card.dart';
-import 'package:boszhan_delivery_app/models/history_basket.dart';
+import 'package:boszhan_delivery_app/models/history_order.dart';
 import 'package:flutter/material.dart';
 
 class HistoryOrderInfoPage extends StatefulWidget {
-  const HistoryOrderInfoPage(this.baskets);
-  final List<HistoryBasket> baskets;
+  const HistoryOrderInfoPage(this.order);
+  final HistoryOrder order;
 
   @override
   _HistoryOrderInfoPageState createState() => _HistoryOrderInfoPageState();
@@ -43,8 +43,8 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
           bottomOpacity: 1,
           iconTheme: const IconThemeData(color: Colors.white)
       ),
-      body: ListView.separated(itemCount: widget.baskets.length,
-        itemBuilder: (BuildContext context, int index) => widget.baskets[index].type == 0 ? HistoryProductCard(widget.baskets[index]) : Ink(color: Colors.red[50], child: HistoryProductCard(widget.baskets[index])),
+      body: ListView.separated(itemCount: widget.order.basket.length,
+        itemBuilder: (BuildContext context, int index) => widget.order.basket[index].type == 0 ? HistoryProductCard(widget.order.basket[index]) : Ink(color: Colors.red[50], child: HistoryProductCard(widget.order.basket[index])),
         separatorBuilder: (context, index){
           return const Divider();
         }
@@ -53,6 +53,6 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
   }
 
   void toPrint(){
-    print('Printing');
+    if (widget.order.status == 3) print('Printing');
   }
 }

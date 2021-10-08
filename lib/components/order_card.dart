@@ -45,7 +45,7 @@ class OrderCard extends StatelessWidget{
                         icon: const Icon(Icons.open_in_full, color: Colors.white),
                         label: const Text("ОТКРЫТЬ ЗАКАЗ"),
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => OrderInfoPage(order.basket, order.totalCost, order.orderId)));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => OrderInfoPage(order)));
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.green,

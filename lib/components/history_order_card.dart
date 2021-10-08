@@ -18,7 +18,7 @@ class HistoryOrderCard extends StatelessWidget{
       subtitle: Text('Адрес: ' + order.storeAddress, style: const TextStyle(fontSize: 20)),
       trailing: const Icon(Icons.keyboard_arrow_right),
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryOrderInfoPage(order.basket)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryOrderInfoPage(order)));
       }
     );
   }
