@@ -21,27 +21,27 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          elevation: 0,
-          centerTitle: true,
-          title: const Text('Выполненные заказы', style: TextStyle(color: Colors.white, fontSize: 20)),
-          actions: <Widget>[
-            Padding(
-                padding: const EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                  onTap: () {
-                    toPrint();
-                  },
-                  child: const Icon(
-                      Icons.print
-                  ),
-                )
-            ),
-          ],
-          automaticallyImplyLeading: true,
-          backgroundColor: Colors.red,
-          shadowColor: Colors.white,
-          bottomOpacity: 1,
-          iconTheme: const IconThemeData(color: Colors.white)
+        elevation: 0,
+        centerTitle: true,
+        title: const Text('Выполненные заказы', style: TextStyle(color: Colors.white, fontSize: 20)),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () {
+                toPrint();
+              },
+              child: const Icon(
+                  Icons.print
+              ),
+            )
+          ),
+        ],
+        automaticallyImplyLeading: true,
+        backgroundColor: Colors.red,
+        shadowColor: Colors.white,
+        bottomOpacity: 1,
+        iconTheme: const IconThemeData(color: Colors.white)
       ),
       body: ListView.separated(itemCount: widget.order.basket.length,
         itemBuilder: (BuildContext context, int index) => widget.order.basket[index].type == 0 ? HistoryProductCard(widget.order.basket[index]) : Ink(color: Colors.red[50], child: HistoryProductCard(widget.order.basket[index])),

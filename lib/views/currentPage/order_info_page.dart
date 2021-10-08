@@ -97,7 +97,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                     child: ElevatedButton.icon(
                       icon: const Icon(Icons.add_circle, color: Colors.white),
                       label: const Text('Изменить'),
-                      onPressed: isButtonDisabled ? null : addToOrder,
+                      onPressed: isButtonDisabled ? null : editOrder,
                       style: ElevatedButton.styleFrom(
                         primary: Colors.blue,
                         textStyle: const TextStyle(color: Colors.white,fontSize: 20),
@@ -121,76 +121,6 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
     );
   }
 
-
-  void finishOrder() async{
-    String status = '';
-    ChangeStatusProvider().changeStatus(widget.order.orderId.toString(), 5).then((value) => status = value).whenComplete((){
-      if (status == 'Success'){
-        Navigator.pop(context);
-      }
-      else{
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
-        ));
-      }
-    });
-  }
-
-  void cancelOrder() async{
-    String status = '';
-    ChangeStatusProvider().changeStatus(widget.order.orderId.toString(), 4).then((value) => status = value).whenComplete((){
-      if (status == 'Success'){
-        Navigator.pop(context);
-      }
-      else{
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
-        ));
-      }
-    });
-  }
-
-  void addToOrder(){
-    print('Add');
-  }
-
-  Future<void> displayTextInputDialog() async {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Комментарий'),
-          content: TextField(
-            controller: commentController,
-            decoration: const InputDecoration(hintText: "Введите причину"),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              color: Colors.red,
-              textColor: Colors.white,
-              child: const Text('Отмена'),
-              onPressed: () {
-                setState(() {
-                  Navigator.pop(context);
-                });
-              },
-            ),
-            FlatButton(
-              color: Colors.green,
-              textColor: Colors.white,
-              child: const Text('Сохранить'),
-              onPressed: () {
-                setState(() {
-                  Navigator.pop(context);
-                });
-              },
-            ),
-          ],
-        );
-      }
-    );
-  }
-
   Future<void> displayPaymentTypeDialog() async {
     return showDialog(
         context: context,
@@ -198,32 +128,32 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
           return AlertDialog(
             title: const Text('Выберите способ оплаты'),
             content: SizedBox(
-              height: 60,
-              child: DropdownButton(
-                value: _value,
-                items: const [
-                  DropdownMenuItem(
-                    child: Text("Наличный"),
-                    value: 1,
-                  ),
-                  DropdownMenuItem(
-                    child: Text("Без наличный"),
-                    value: 2,
-                  ),
-                  DropdownMenuItem(
-                    child: Text("Рассрочка платежа"),
-                    value: 3,
-                  )
-                ],
-                onChanged: (value){
-                  setState((){
-                    _value = value;
-                    Navigator.pop(context);
-                    displayPaymentTypeDialog();
-                  });
-                },
-                hint:const Text("Select item")
-              )
+                height: 60,
+                child: DropdownButton(
+                    value: _value,
+                    items: const [
+                      DropdownMenuItem(
+                        child: Text("Наличный"),
+                        value: 1,
+                      ),
+                      DropdownMenuItem(
+                        child: Text("Без наличный"),
+                        value: 2,
+                      ),
+                      DropdownMenuItem(
+                        child: Text("Рассрочка платежа"),
+                        value: 3,
+                      )
+                    ],
+                    onChanged: (value){
+                      setState((){
+                        _value = value;
+                        Navigator.pop(context);
+                        displayPaymentTypeDialog();
+                      });
+                    },
+                    hint:const Text("Select item")
+                )
             ),
             actions: <Widget>[
               FlatButton(
@@ -253,4 +183,72 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
     );
   }
 
+  Future<void> displayTextInputDialog() async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Комментарий'),
+            content: TextField(
+              controller: commentController,
+              decoration: const InputDecoration(hintText: "Введите причину"),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                color: Colors.red,
+                textColor: Colors.white,
+                child: const Text('Отмена'),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              FlatButton(
+                color: Colors.green,
+                textColor: Colors.white,
+                child: const Text('Сохранить'),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          );
+        }
+    );
+  }
+
+  void finishOrder() async{
+    String status = '';
+    ChangeStatusProvider().changeStatus(widget.order.orderId.toString(), 5).then((value) => status = value).whenComplete((){
+      if (status == 'Success'){
+        Navigator.pop(context);
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
+        ));
+      }
+    });
+  }
+
+  void cancelOrder() async{
+    String status = '';
+    ChangeStatusProvider().changeStatus(widget.order.orderId.toString(), 4).then((value) => status = value).whenComplete((){
+      if (status == 'Success'){
+        Navigator.pop(context);
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
+        ));
+      }
+    });
+  }
+
+  void editOrder(){
+    print('Add');
+  }
 }
