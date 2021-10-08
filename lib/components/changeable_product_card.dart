@@ -1,5 +1,6 @@
 import 'package:boszhan_delivery_app/models/basket.dart';
 import 'package:boszhan_delivery_app/utills/const.dart';
+import 'package:boszhan_delivery_app/views/currentPage/change_products_in_order.dart';
 import 'package:flutter/material.dart';
 
 class ChangeableProductCard extends StatefulWidget {
@@ -9,7 +10,7 @@ class ChangeableProductCard extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return new ChangeableProductCardState();
+    return ChangeableProductCardState();
   }
 }
 
@@ -42,7 +43,9 @@ class ChangeableProductCardState extends State<ChangeableProductCard> {
               keyboardType: TextInputType.number,
               style: const TextStyle(fontSize: 18),
               onChanged: (value) {
-
+                AppConstants.index = widget.indexOfTile;
+                AppConstants.value = value;
+                MyNotification().dispatch(context);
               }
             ),
           ),
@@ -51,4 +54,8 @@ class ChangeableProductCardState extends State<ChangeableProductCard> {
       ),
     );
   }
+}
+
+class MyNotification extends Notification{
+  MyNotification();
 }

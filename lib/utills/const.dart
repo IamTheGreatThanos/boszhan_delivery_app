@@ -8,4 +8,6 @@ class AppColors {
 
 class AppConstants {
   static final String baseUrl = "http://192.168.5.30/";
+  static int index = -1;
+  static String value = '';
 }
