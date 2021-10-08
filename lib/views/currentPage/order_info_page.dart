@@ -1,6 +1,7 @@
 import 'package:boszhan_delivery_app/components/product_card.dart';
 import 'package:boszhan_delivery_app/models/order.dart';
 import 'package:boszhan_delivery_app/services/orders_api_provider.dart';
+import 'package:boszhan_delivery_app/views/currentPage/change_products_in_order.dart';
 import 'package:boszhan_delivery_app/widgets/app_bar.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,6 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
 
   @override
   void initState() {
-    print(widget.order.status);
     widget.order.status != 2 ? isButtonDisabled = true : isButtonDisabled = false;
     super.initState();
   }
@@ -260,8 +260,6 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
         ));
       }
     });
-
-
   }
 
   void cancelOrder() async{
@@ -281,6 +279,6 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
   }
 
   void editOrder(){
-    print('Add');
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeProductsInOrderPage(widget.order)));
   }
 }

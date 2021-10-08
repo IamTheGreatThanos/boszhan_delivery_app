@@ -1,3 +1,4 @@
+import 'package:boszhan_delivery_app/models/basket.dart';
 import 'package:boszhan_delivery_app/utills/const.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -94,6 +95,33 @@ class OrdersProvider {
       },
       body: jsonEncode(<String, dynamic>{
         "payment_type": type,
+      }),
+    );
+
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      return 'Success';
+    }
+    else {
+      return 'Error';
+    }
+  }
+
+
+  Future<String> changeBasket(String id, List<Basket> list) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+
+    final response = await http.post(
+      Uri.parse(API_URL + 'api/delivery-order/update'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization' : "Bearer $token"
+      },
+      body: jsonEncode(<String, dynamic>{
+        "order_id": id,
+        "basket" : list
       }),
     );
 
