@@ -194,7 +194,6 @@ class _LoginPageState extends State<LoginPage> {
     _firebaseMessaging.getToken().then((token) async {
       var response = await AuthProvider().sendDeviceToken(token!);
       if (response != 'Error') print('Device token sent successfully!');
-      print(token);
     });
   }
 }
