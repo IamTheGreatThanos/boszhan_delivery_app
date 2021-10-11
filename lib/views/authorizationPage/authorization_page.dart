@@ -6,7 +6,6 @@ import 'package:boszhan_delivery_app/views/home_page.dart';
 import 'package:boszhan_delivery_app/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../main.dart';
 
 
@@ -22,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  // final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
   void initState() {
@@ -70,27 +69,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     });
 
-    firebaseCloudMessaging_Listeners();
-
     super.initState();
-  }
-
-  void firebaseCloudMessaging_Listeners() {
-    // _firebaseMessaging.getToken().then((token){
-    //   print(token);
-    // });
-
-    // _firebaseMessaging.configure(
-    //   onMessage: (Map<String, dynamic> message) async {
-    //     print('on message $message');
-    //   },
-    //   onResume: (Map<String, dynamic> message) async {
-    //     print('on resume $message');
-    //   },
-    //   onLaunch: (Map<String, dynamic> message) async {
-    //     print('on launch $message');
-    //   },
-    // );
   }
 
   @override
@@ -195,11 +174,8 @@ class _LoginPageState extends State<LoginPage> {
   void login() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await LoginProvider().login(emailController.text, passwordController.text);
-
     // TODO: Действие при авторизации пользователя...
-
     // print(response);
-
     if (response != 'Error'){
       prefs.setString("token", response['token']);
       prefs.setInt("user_id", response['user']['id']);
@@ -212,9 +188,23 @@ class _LoginPageState extends State<LoginPage> {
         content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
       ));
     }
-    // await StoreRepository().saveAllStores(response['user']['id']);
-    // var testStores = await DBProvider.db.getAllStores();
+  }
 
+  void getFCMToken() {
+    _firebaseMessaging.getToken().then((token){
+      print(token);
+    });
 
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print('on message $message');
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print('on resume $message');
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print('on launch $message');
+      },
+    );
   }
 }
