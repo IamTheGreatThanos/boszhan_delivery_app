@@ -25,7 +25,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
         centerTitle: true,
         title: const Text('Выполненные заказы', style: TextStyle(color: Colors.white, fontSize: 20)),
         actions: <Widget>[
-          Padding(
+          widget.order.status == 3 ? Padding(
             padding: const EdgeInsets.only(right: 20.0),
             child: GestureDetector(
               onTap: () {
@@ -35,7 +35,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                   Icons.print
               ),
             )
-          ),
+          ) : const SizedBox(),
         ],
         automaticallyImplyLeading: true,
         backgroundColor: Colors.red,
@@ -53,6 +53,6 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
   }
 
   void toPrint(){
-    if (widget.order.status == 3) print('Printing');
+    print('Printing');
   }
 }
