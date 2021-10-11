@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'package:boszhan_delivery_app/models/history_order.dart';
-import 'package:boszhan_delivery_app/models/order.dart';
 import 'package:boszhan_delivery_app/services/history_api_provider.dart';
 import 'package:boszhan_delivery_app/services/orders_api_provider.dart';
 import 'package:boszhan_delivery_app/views/currentPage/current_orders_page.dart';
 import 'package:boszhan_delivery_app/views/historyPage/orders_history_page.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../main.dart';
 
 class HomePage extends StatefulWidget {
   // HomePage(this.product);
@@ -23,6 +25,16 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     downloadAction();
     super.initState();
+
+    // flutterLocalNotificationsPlugin.show(0, "Testing", "Hello user?",
+    //   NotificationDetails(
+    //       android: AndroidNotificationDetails(channel.id, channel.name,
+    //           importance: Importance.high,
+    //           color: Colors.blue,
+    //           playSound: true,
+    //           icon: '@mipmap/ic_launcher')
+    //   )
+    // );
   }
 
   @override

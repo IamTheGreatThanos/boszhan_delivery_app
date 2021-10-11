@@ -1,9 +1,13 @@
 import 'package:boszhan_delivery_app/services/login_api_provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:boszhan_delivery_app/views/home_page.dart';
 import 'package:boszhan_delivery_app/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../main.dart';
 
 
 
@@ -18,11 +22,75 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  // final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
   @override
   void initState() {
     emailController.text = 'isabekov@mail.kz';
     passwordController.text = 'isabekov';
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                color: Colors.blue,
+                playSound: true,
+                icon: '@mipmap/ic_launcher',
+              ),
+            ));
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('A new onMessageOpenedApp event was published!');
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if (notification != null && android != null) {
+        showDialog(
+            context: context,
+            builder: (_) {
+              return AlertDialog(
+                title: Text('notification.title'),
+                content: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [Text('notification.body')],
+                  ),
+                ),
+              );
+            });
+      }
+    });
+
+    firebaseCloudMessaging_Listeners();
+
     super.initState();
+  }
+
+  void firebaseCloudMessaging_Listeners() {
+    // _firebaseMessaging.getToken().then((token){
+    //   print(token);
+    // });
+
+    // _firebaseMessaging.configure(
+    //   onMessage: (Map<String, dynamic> message) async {
+    //     print('on message $message');
+    //   },
+    //   onResume: (Map<String, dynamic> message) async {
+    //     print('on resume $message');
+    //   },
+    //   onLaunch: (Map<String, dynamic> message) async {
+    //     print('on launch $message');
+    //   },
+    // );
   }
 
   @override
