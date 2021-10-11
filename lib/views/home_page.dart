@@ -166,10 +166,10 @@ class _HomePageState extends State<HomePage> {
       });
     }).whenComplete((){
       if (responseData['data'] != 'Error'){
-
-        var jsonString = jsonEncode(responseData['data']);
-        prefs.setString('DownloadedData', jsonString);
-
+        if (responseData['data'] != null){
+          var jsonString = jsonEncode(responseData['data']);
+          prefs.setString('DownloadedData', jsonString);
+        }
       }
       else{
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -190,16 +190,17 @@ class _HomePageState extends State<HomePage> {
       });
     }).whenComplete((){
       if (responseData['data'] != 'Error'){
-        List<HistoryOrder> list = <HistoryOrder>[];
+        if (responseData['data'] != null){
+          List<HistoryOrder> list = <HistoryOrder>[];
 
-        for (Map<String, dynamic> i in responseData['data']){
-          HistoryOrder order = HistoryOrder.fromJson(i);
-          list.add(order);
+          for (Map<String, dynamic> i in responseData['data']){
+            HistoryOrder order = HistoryOrder.fromJson(i);
+            list.add(order);
+          }
+
+          var jsonString = jsonEncode(responseData['data']);
+          prefs.setString('DownloadedHistoryData', jsonString);
         }
-
-        var jsonString = jsonEncode(responseData['data']);
-        prefs.setString('DownloadedHistoryData', jsonString);
-
       }
       else{
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

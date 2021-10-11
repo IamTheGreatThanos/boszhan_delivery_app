@@ -20,7 +20,7 @@ class HistoryProvider {
       }
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 && jsonDecode(response.body)['data'] != null) {
       final result = jsonDecode(response.body);
       return result;
     }

@@ -181,6 +181,7 @@ class _LoginPageState extends State<LoginPage> {
       prefs.setString("token", response['token']);
       prefs.setInt("user_id", response['user']['id']);
       prefs.setString("full_name", response['user']['full_name']);
+      // print(response['token']);
 
       Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
     }
