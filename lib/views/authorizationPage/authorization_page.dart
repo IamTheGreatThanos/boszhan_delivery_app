@@ -1,4 +1,4 @@
-import 'package:boszhan_delivery_app/services/login_api_provider.dart';
+import 'package:boszhan_delivery_app/services/auth_api_provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
@@ -7,8 +7,6 @@ import 'package:boszhan_delivery_app/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../main.dart';
-
-
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -21,12 +19,14 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   @override
   void initState() {
     emailController.text = 'isabekov@mail.kz';
     passwordController.text = 'isabekov';
+
+    getFCMToken();
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
@@ -173,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void login() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var response = await LoginProvider().login(emailController.text, passwordController.text);
+    var response = await AuthProvider().login(emailController.text, passwordController.text);
     // TODO: Действие при авторизации пользователя...
     // print(response);
     if (response != 'Error'){
@@ -191,20 +191,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void getFCMToken() {
-    _firebaseMessaging.getToken().then((token){
-      print(token);
+    _firebaseMessaging.getToken().then((token) async {
+      var response = await AuthProvider().sendDeviceToken(token!);
+      if (response != 'Error') print('Device token sent successfully!');
     });
-
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print('on message $message');
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print('on resume $message');
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print('on launch $message');
-      },
-    );
   }
 }

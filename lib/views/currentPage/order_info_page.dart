@@ -146,6 +146,10 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                       DropdownMenuItem(
                         child: Text("Рассрочка платежа"),
                         value: 3,
+                      ),
+                      DropdownMenuItem(
+                        child: Text("Kaspi.kz"),
+                        value: 4,
                       )
                     ],
                     onChanged: (value){
@@ -177,11 +181,11 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                   var connectivityResult = await (Connectivity().checkConnectivity());
                   if (connectivityResult == ConnectivityResult.mobile) {
                     setState(() {
-                      _value != 3 ? finishOrder(3,int.parse(_value.toString())) : finishOrder(5,int.parse(_value.toString()));
+                      finishOrder(int.parse(_value.toString()));
                     });
                   } else if (connectivityResult == ConnectivityResult.wifi) {
                     setState(() {
-                      _value != 3 ? finishOrder(3,int.parse(_value.toString())) : finishOrder(5,int.parse(_value.toString()));
+                      finishOrder(int.parse(_value.toString()));
                     });
                   }
                   else{
@@ -246,7 +250,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
     );
   }
 
-  void finishOrder(int statusType, int paymentType) async{
+  void finishOrder(int paymentType) async{
     String status = '';
     OrdersProvider().changePaymentType(widget.order.orderId.toString(), paymentType).then((value) => status = value).whenComplete((){
       if (status == 'Success'){
