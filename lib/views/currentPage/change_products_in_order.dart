@@ -3,7 +3,7 @@ import 'package:boszhan_delivery_app/components/product_card.dart';
 import 'package:boszhan_delivery_app/models/basket.dart';
 import 'package:boszhan_delivery_app/models/order.dart';
 import 'package:boszhan_delivery_app/services/orders_api_provider.dart';
-import 'package:boszhan_delivery_app/utills/const.dart';
+import 'package:boszhan_delivery_app/utils/const.dart';
 import 'package:boszhan_delivery_app/widgets/app_bar.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';

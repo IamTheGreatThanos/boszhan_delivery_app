@@ -1,5 +1,5 @@
 import 'package:boszhan_delivery_app/models/basket.dart';
-import 'package:boszhan_delivery_app/utills/const.dart';
+import 'package:boszhan_delivery_app/utils/const.dart';
 import 'package:boszhan_delivery_app/views/currentPage/change_products_in_order.dart';
 import 'package:flutter/material.dart';
 

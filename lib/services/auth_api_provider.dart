@@ -1,4 +1,4 @@
-import 'package:boszhan_delivery_app/utills/const.dart';
+import 'package:boszhan_delivery_app/utils/const.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
