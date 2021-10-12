@@ -19,6 +19,7 @@ class OrderInfoPage extends StatefulWidget {
 class _OrderInfoPageState extends State<OrderInfoPage> {
 
   TextEditingController commentController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
   Object? _value = 1;
   bool isButtonDisabled = false;
 
@@ -131,36 +132,47 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
           return AlertDialog(
             title: const Text('Выберите способ оплаты'),
             content: SizedBox(
-                height: 60,
-                child: DropdownButton(
-                    value: _value,
-                    items: const [
-                      DropdownMenuItem(
-                        child: Text("Наличный"),
-                        value: 1,
-                      ),
-                      DropdownMenuItem(
-                        child: Text("Без наличный"),
-                        value: 2,
-                      ),
-                      DropdownMenuItem(
-                        child: Text("Рассрочка платежа"),
-                        value: 3,
-                      ),
-                      DropdownMenuItem(
-                        child: Text("Kaspi.kz"),
-                        value: 4,
+              height: 150,
+              child: Column(
+                children: [
+                  SizedBox(
+                      height: 60,
+                      child: DropdownButton(
+                          value: _value,
+                          items: const [
+                            DropdownMenuItem(
+                              child: Text("Наличный"),
+                              value: 1,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Без наличный"),
+                              value: 2,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Рассрочка платежа"),
+                              value: 3,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Kaspi.kz"),
+                              value: 4,
+                            )
+                          ],
+                          onChanged: (value){
+                            setState((){
+                              _value = value;
+                              Navigator.pop(context);
+                              displayPaymentTypeDialog();
+                            });
+                          },
+                          hint:const Text("Select item")
                       )
-                    ],
-                    onChanged: (value){
-                      setState((){
-                        _value = value;
-                        Navigator.pop(context);
-                        displayPaymentTypeDialog();
-                      });
-                    },
-                    hint:const Text("Select item")
-                )
+                  ),
+                  _value == 4 ? TextField(
+                    controller: phoneController,
+                    decoration: const InputDecoration(hintText: "Введите причину"),
+                    ) : Container(),
+                ],
+              ),
             ),
             actions: <Widget>[
               FlatButton(
