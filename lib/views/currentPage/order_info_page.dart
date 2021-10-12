@@ -1,10 +1,12 @@
 import 'package:boszhan_delivery_app/components/product_card.dart';
 import 'package:boszhan_delivery_app/models/order.dart';
 import 'package:boszhan_delivery_app/services/orders_api_provider.dart';
+import 'package:boszhan_delivery_app/utills/number_formatter.dart';
 import 'package:boszhan_delivery_app/views/currentPage/change_products_in_order.dart';
 import 'package:boszhan_delivery_app/widgets/app_bar.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../home_page.dart';
 
@@ -20,6 +22,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
 
   TextEditingController commentController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+  final _mobileFormatter = NumberTextInputFormatter();
   Object? _value = 1;
   bool isButtonDisabled = false;
 
@@ -167,10 +170,24 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                           hint:const Text("Select item")
                       )
                   ),
-                  _value == 4 ? TextField(
+                  _value == 4 ? TextFormField(
                     controller: phoneController,
-                    decoration: const InputDecoration(hintText: "Введите причину"),
-                    ) : Container(),
+                    decoration: const InputDecoration(hintText: "Номер телефона kaspi.kz"),
+                    keyboardType: TextInputType.phone,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                      _mobileFormatter,
+                    ],
+                    maxLength: 12,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Номер телефона';
+                      } else if (!value.contains('+')) {
+                        return 'Введите корректный номер телефона';
+                      }
+                      return null;
+                    },
+                  ) : Container(),
                 ],
               ),
             ),
@@ -192,13 +209,37 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                 onPressed: () async {
                   var connectivityResult = await (Connectivity().checkConnectivity());
                   if (connectivityResult == ConnectivityResult.mobile) {
-                    setState(() {
-                      finishOrder(int.parse(_value.toString()));
-                    });
+                    if(_value == 4){
+                      if (phoneController.text.length == 12){
+                        setState(() {
+                          finishOrder(int.parse(_value.toString()), phoneController.text.substring(2));
+                        });
+                      }
+                      else{
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text("Введите корректный номер телефона.", style: TextStyle(fontSize: 20)),
+                        ));
+                      }
+                    }
+                    else{
+                      finishOrder(int.parse(_value.toString()), 'null');
+                    }
                   } else if (connectivityResult == ConnectivityResult.wifi) {
-                    setState(() {
-                      finishOrder(int.parse(_value.toString()));
-                    });
+                    if(_value == 4){
+                      if (phoneController.text.length == 12){
+                        setState(() {
+                          finishOrder(int.parse(_value.toString()), phoneController.text.substring(2));
+                        });
+                      }
+                      else{
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text("Введите корректный номер телефона.", style: TextStyle(fontSize: 20)),
+                        ));
+                      }
+                    }
+                    else{
+                      finishOrder(int.parse(_value.toString()), 'null');
+                    }
                   }
                   else{
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -262,9 +303,9 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
     );
   }
 
-  void finishOrder(int paymentType) async{
+  void finishOrder(int paymentType, String number) async{
     String status = '';
-    OrdersProvider().changePaymentType(widget.order.orderId.toString(), paymentType, '7004448696').then((value) => status = value).whenComplete((){
+    OrdersProvider().changePaymentType(widget.order.orderId.toString(), paymentType, number).then((value) => status = value).whenComplete((){
       if (status == 'Success'){
         Navigator.pushAndRemoveUntil<dynamic>(context, MaterialPageRoute<dynamic>(
           builder: (BuildContext context) => HomePage(),
