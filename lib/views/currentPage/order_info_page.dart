@@ -252,7 +252,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
 
   void finishOrder(int paymentType) async{
     String status = '';
-    OrdersProvider().changePaymentType(widget.order.orderId.toString(), paymentType).then((value) => status = value).whenComplete((){
+    OrdersProvider().changePaymentType(widget.order.orderId.toString(), paymentType, '7004448696').then((value) => status = value).whenComplete((){
       if (status == 'Success'){
         Navigator.pushAndRemoveUntil<dynamic>(context, MaterialPageRoute<dynamic>(
           builder: (BuildContext context) => HomePage(),

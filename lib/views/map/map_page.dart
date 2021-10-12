@@ -11,21 +11,33 @@ class MapPage extends StatefulWidget {
 }
 
 class MapPageState extends State<MapPage> {
-  final Completer<GoogleMapController> _controller = Completer();
+  final Completer<GoogleMapController> _mapController = Completer();
 
   static const CameraPosition _initialCameraPosition = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
+    target: LatLng(43.374555, 76.930951),
+    zoom: 14.4756,
   );
 
   static const CameraPosition _goingCameraPosition = CameraPosition(
     bearing: 192.8334901395799,
-    target: LatLng(37.43296265331129, -122.08832357078792),
+    target: LatLng(43.374555, 76.930951),
     tilt: 59.440717697143555,
     zoom: 19.151926040649414
   );
 
+  final Set<Marker> _markers = {}; // CLASS MEMBER, MAP OF MARKS
+
   bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +47,13 @@ class MapPageState extends State<MapPage> {
           child: buildAppBar('Просмотр заказа')
       ),
       body: GoogleMap(
-        mapType: MapType.hybrid,
+        mapType: MapType.satellite,
         initialCameraPosition: _initialCameraPosition,
         onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
+          _mapController.complete(controller);
+          _onMapCreated(controller);
         },
+        markers: _markers
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _goToTheLake,
@@ -50,7 +64,18 @@ class MapPageState extends State<MapPage> {
   }
 
   Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
+    final GoogleMapController controller = await _mapController.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_goingCameraPosition));
+  }
+
+  void _onMapCreated(GoogleMapController controller){
+    setState(() {
+      _markers.add(
+        const Marker(
+          markerId: MarkerId('id-1'),
+          position: LatLng(43.374555, 76.930951)
+        )
+      );
+    });
   }
 }
