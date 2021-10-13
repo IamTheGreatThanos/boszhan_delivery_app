@@ -13,9 +13,7 @@ class VersionCheckProvider{
         'Content-Type': 'application/json; charset=UTF-8',
       }
     );
-
     // print(response.body);
-
     if (response.statusCode == 200) {
       Map<String, dynamic> result = jsonDecode(response.body);
       return result;
@@ -25,29 +23,4 @@ class VersionCheckProvider{
       return result;
     }
   }
-
-  // Future<String> downloadAPK() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   var token = prefs.getString('token');
-  //
-  //   final response = await http.post(
-  //     Uri.parse(API_URL + 'api/device-token'),
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //       'Authorization' : "Bearer $token"
-  //     },
-  //     body: jsonEncode(<String, dynamic>{
-  //       "device_token": '',
-  //     }),
-  //   );
-  //
-  //   // print(response.body);
-  //
-  //   if (response.statusCode == 200) {
-  //     return 'Success';
-  //   }
-  //   else {
-  //     return 'Error';
-  //   }
-  // }
 }
