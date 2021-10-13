@@ -1,4 +1,5 @@
 import 'package:boszhan_delivery_app/views/authorizationPage/authorization_page.dart';
+import 'package:boszhan_delivery_app/views/checking_version_page.dart';
 import 'package:boszhan_delivery_app/views/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +66,7 @@ class MyApp extends StatelessWidget {
       ),
       home:
       // getRegistrationStatus() == false ? HomePage() :
-      const LoginPage()
+      CheckingVersionPage()
     );
   }
 
