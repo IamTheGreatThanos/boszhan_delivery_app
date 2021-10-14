@@ -12,7 +12,6 @@ class HistoryOrder {
   String createdAt = '';
   String updatedAt = '';
   int storeId = 0;
-  String mobileId = '';
   var deliveredAt;
   var deletedAt;
   int status = 0;
@@ -32,7 +31,6 @@ class HistoryOrder {
     required this.createdAt,
     required this.updatedAt,
     required this.storeId,
-    required this.mobileId,
     this.deliveredAt,
     this.deletedAt,
     required this.status,
@@ -59,7 +57,6 @@ class HistoryOrder {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     storeId = json['store_id'];
-    mobileId = json['mobile_id'];
     deliveredAt = json['delivered_at'];
     deletedAt = json['deleted_at'];
     status = json['status'];
@@ -81,7 +78,6 @@ class HistoryOrder {
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['store_id'] = storeId;
-    data['mobile_id'] = mobileId;
     data['delivered_at'] = deliveredAt;
     data['deleted_at'] = deletedAt;
     data['status'] = status;

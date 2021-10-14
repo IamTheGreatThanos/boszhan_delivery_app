@@ -46,6 +46,8 @@ dependencies:
   flutter_local_notifications: ^9.0.0
   location: ^4.3.0
   url_launcher: ^6.0.12
+  esc_pos_bluetooth: ^0.4.1
+  flutter_bluetooth_basic: ^0.1.7
 
 dev_dependencies:
   flutter_test:
