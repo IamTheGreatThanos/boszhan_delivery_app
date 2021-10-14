@@ -1,5 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.boszhan_delivery_app">
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
    <application
         android:label="Delivery App"
         android:icon="@mipmap/ic_launcher">
@@ -46,14 +50,5 @@
        <meta-data android:name="com.google.android.geo.API_KEY"
            android:value="AIzaSyCG5XEnHa7cEtjedADU9DOac5sew07MiE4"/>
 
-<!--       <provider-->
-<!--           android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"-->
-<!--           android:authorities="${applicationId}.flutter_downloader.provider"-->
-<!--           android:exported="false"-->
-<!--           android:grantUriPermissions="true">-->
-<!--           <meta-data-->
-<!--               android:name="android.support.FILE_PROVIDER_PATHS"-->
-<!--               android:resource="@xml/provider_paths"/>-->
-<!--       </provider>-->
     </application>
 </manifest>

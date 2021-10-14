@@ -12,8 +12,10 @@ class HistoryOrderInfoPage extends StatefulWidget {
 
 class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
 
+
   @override
   void initState() {
+    initBluetooth();
     super.initState();
   }
 
@@ -54,7 +56,9 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
 
   void toPrint(){
     print('Printing');
+  }
 
+  void initBluetooth() async {
 
   }
 }
