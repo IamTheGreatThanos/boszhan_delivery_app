@@ -69,7 +69,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
   }
 
   void initPrinter() async {
-    _printerManager.startScan(Duration(seconds: 2));
+    _printerManager.startScan(Duration(seconds: 5));
     _printerManager.scanResults.listen((event) {
       if (!mounted) return;
       setState(() => _devices = event);

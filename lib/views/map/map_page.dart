@@ -13,6 +13,8 @@ class MapPage extends StatefulWidget {
 class MapPageState extends State<MapPage> {
   final Completer<GoogleMapController> _mapController = Completer();
 
+  bool justBool = true;
+
   static const CameraPosition _initialCameraPosition = CameraPosition(
     target: LatLng(43.374555, 76.930951),
     zoom: 14.4756,
@@ -25,7 +27,13 @@ class MapPageState extends State<MapPage> {
     zoom: 19.151926040649414
   );
 
-  final Set<Marker> _markers = {}; // CLASS MEMBER, MAP OF MARKS
+  static const marker1 =  Marker(
+    markerId: MarkerId('id-1'),
+    position: LatLng(43.374555, 76.930951),
+    infoWindow: InfoWindow(title: "Первомайские деликатесы!")
+  );
+
+  final Set<Marker> _markers = {marker1};
 
   bool get wantKeepAlive => true;
 
@@ -47,7 +55,7 @@ class MapPageState extends State<MapPage> {
           child: buildAppBar('Просмотр заказа')
       ),
       body: GoogleMap(
-        mapType: MapType.satellite,
+        mapType: MapType.hybrid,
         initialCameraPosition: _initialCameraPosition,
         onMapCreated: (GoogleMapController controller) {
           _mapController.complete(controller);
@@ -65,17 +73,16 @@ class MapPageState extends State<MapPage> {
 
   Future<void> _goToTheLake() async {
     final GoogleMapController controller = await _mapController.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_goingCameraPosition));
+    justBool ? controller.animateCamera(CameraUpdate.newCameraPosition(_goingCameraPosition))
+        : controller.animateCamera(CameraUpdate.newCameraPosition(_initialCameraPosition));
+    justBool = !justBool;
   }
 
   void _onMapCreated(GoogleMapController controller){
     setState(() {
-      _markers.add(
-        const Marker(
-          markerId: MarkerId('id-1'),
-          position: LatLng(43.374555, 76.930951)
-        )
-      );
+      // _markers.add(
+      //   marker1,
+      // );
     });
   }
 }
