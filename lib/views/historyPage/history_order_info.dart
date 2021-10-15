@@ -79,6 +79,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
           content: Text("Нет подключенных принтеров!", style: TextStyle(fontSize: 20)),
         ));
       }
+
     });
     print(_devices);
   }
