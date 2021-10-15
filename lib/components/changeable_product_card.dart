@@ -27,8 +27,8 @@ class ChangeableProductCardState extends State<ChangeableProductCard> {
   Widget build(BuildContext context) {
     return ListTile(
       leading: const CircleAvatar(
-          backgroundColor: Colors.grey,
-          child: Icon(Icons.location_pin, color: Colors.white,)
+          backgroundColor: Colors.amber,
+          child: Icon(Icons.shopping_cart_outlined, color: Colors.white,)
       ),
       title: Text(widget.basket.name, style: const TextStyle(fontSize: 20)),
       subtitle: Padding(

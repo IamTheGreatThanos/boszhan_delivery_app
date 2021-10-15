@@ -11,8 +11,8 @@ class HistoryOrderCard extends StatelessWidget{
     // return _buildTiles(entry);
     return ListTile(
       leading: const CircleAvatar(
-          backgroundColor: Colors.grey,
-          child: Icon(Icons.location_pin, color: Colors.white,)
+          backgroundColor: Colors.amber,
+          child: Icon(Icons.shopping_basket, color: Colors.white,)
       ),
       title: Text('Название: ' + order.name, style: const TextStyle(fontSize: 20)),
       subtitle: Text('Адрес: ' + order.storeAddress, style: const TextStyle(fontSize: 20)),
