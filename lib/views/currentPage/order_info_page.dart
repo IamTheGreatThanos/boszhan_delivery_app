@@ -24,7 +24,9 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
   TextEditingController phoneController = TextEditingController();
   final _mobileFormatter = NumberTextInputFormatter();
   Object? _value = 1;
+  Object? _value2 = 1;
   bool isButtonDisabled = false;
+  List<String> causes = ['Истек срок годности','Жидкость в упаковке', 'Развакуум', 'Нарушенная упаковка'];
 
   @override
   void initState() {
@@ -260,9 +262,59 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
         builder: (context) {
           return AlertDialog(
             title: const Text('Комментарий'),
-            content: TextField(
-              controller: commentController,
-              decoration: const InputDecoration(hintText: "Введите причину"),
+            content: SizedBox(
+              height: 150,
+              child: Column(
+                children: [
+                  SizedBox(
+                      height: 60,
+                      child: DropdownButton(
+                          value: _value2,
+                          items: const [
+                            DropdownMenuItem(
+                              child: Text("Истек срок годности"),
+                              value: 1,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Жидкость в упаковке"),
+                              value: 2,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Развакуум"),
+                              value: 3,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Нарушенная упаковка"),
+                              value: 4,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Другое"),
+                              value: 5,
+                            )
+                          ],
+                          onChanged: (value){
+                            setState((){
+                              _value2 = value;
+                              Navigator.pop(context);
+                              displayPaymentTypeDialog();
+                            });
+                          },
+                          hint:const Text("Select item")
+                      )
+                  ),
+                  _value2 == 4 ? TextFormField(
+                    controller: commentController,
+                    decoration: const InputDecoration(hintText: "Введите причину"),
+                    maxLength: 30,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Введите причину';
+                      }
+                      return null;
+                    },
+                  ) : Container(),
+                ],
+              ),
             ),
             actions: <Widget>[
               FlatButton(
@@ -321,7 +373,11 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
 
   void cancelOrder() async{
     String status = '';
-    OrdersProvider().reject(widget.order.orderId.toString(), commentController.text).then((value) => status = value).whenComplete((){
+    String comment = '';
+
+    _value2 == 5 ? comment = commentController.text : comment = causes[int.parse(_value2.toString())-1];
+
+    OrdersProvider().reject(widget.order.orderId.toString(), comment).then((value) => status = value).whenComplete((){
       if (status == 'Success'){
         Navigator.pushAndRemoveUntil<dynamic>(context, MaterialPageRoute<dynamic>(
             builder: (BuildContext context) => HomePage(),
