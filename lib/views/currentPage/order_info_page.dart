@@ -296,13 +296,13 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                             setState((){
                               _value2 = value;
                               Navigator.pop(context);
-                              displayPaymentTypeDialog();
+                              displayTextInputDialog();
                             });
                           },
                           hint:const Text("Select item")
                       )
                   ),
-                  _value2 == 4 ? TextFormField(
+                  _value2 == 5 ? TextFormField(
                     controller: commentController,
                     decoration: const InputDecoration(hintText: "Введите причину"),
                     maxLength: 30,
