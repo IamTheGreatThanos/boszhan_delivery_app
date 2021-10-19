@@ -217,7 +217,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                           hint:const Text("Select item")
                       )
                   ) : Container(),
-                  _value2 == 2 ? TextFormField(
+                  _value2 == 2 && _value == 4 ? TextFormField(
                     controller: amountController,
                     decoration: const InputDecoration(hintText: "Введите сумму"),
                     keyboardType: TextInputType.phone,
