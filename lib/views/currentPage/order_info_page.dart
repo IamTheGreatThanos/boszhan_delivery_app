@@ -157,7 +157,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                               value: 2,
                             ),
                             DropdownMenuItem(
-                              child: Text("Рассрочка платежа"),
+                              child: Text("Отсрочка платежа"),
                               value: 3,
                             ),
                             DropdownMenuItem(
