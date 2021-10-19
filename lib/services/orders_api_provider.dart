@@ -83,7 +83,7 @@ class OrdersProvider {
   }
 
 
-  Future<String> changePaymentType(String id, int type, String phone) async {
+  Future<String> changePaymentType(String id, int type, String phone, bool paymentFull, String amount) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
 
@@ -95,7 +95,9 @@ class OrdersProvider {
       },
       body: jsonEncode(<String, dynamic>{
         "payment_type" : type,
-        "kaspi_phone" : phone
+        "kaspi_phone" : phone,
+        "payment_full" : paymentFull,
+        "payment_partial" : amount
       }),
     );
 

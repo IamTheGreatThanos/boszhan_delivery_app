@@ -112,6 +112,25 @@ class _CheckingVersionPageState extends State<CheckingVersionPage> {
   }
 
   void checking() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      setState(() {
+        sendRequest();
+      });
+    } else if (connectivityResult == ConnectivityResult.wifi) {
+      setState(() {
+        sendRequest();
+      });
+    }
+    else{
+      Navigator.pushAndRemoveUntil<dynamic>(context, MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => const LoginPage(),
+      ), (route) => false);
+    }
+
+  }
+
+  void sendRequest(){
     Future<Map<String, dynamic>> response = VersionCheckProvider().check();
     Map<String, dynamic> responseData = {};
 

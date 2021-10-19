@@ -22,11 +22,14 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
 
   TextEditingController commentController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+  TextEditingController amountController = TextEditingController();
   final _mobileFormatter = NumberTextInputFormatter();
   Object? _value = 1;
   Object? _value2 = 1;
+
+  List<bool> listOfCheckboxes = [false, false, false, false, false, false];
   bool isButtonDisabled = false;
-  List<String> causes = ['Истек срок годности','Жидкость в упаковке', 'Развакуум', 'Нарушенная упаковка'];
+  List<String> causes = ['Истек срок годности','Жидкость в упаковке', 'Развакуум', 'Нарушенная упаковка', 'Нарушенная упаковка', 'Другое:'];
 
   @override
   void initState() {
@@ -137,7 +140,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
           return AlertDialog(
             title: const Text('Выберите способ оплаты'),
             content: SizedBox(
-              height: 150,
+              height: 270,
               child: Column(
                 children: [
                   SizedBox(
@@ -186,6 +189,45 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                         return 'Номер телефона';
                       } else if (!value.contains('+')) {
                         return 'Введите корректный номер телефона';
+                      }
+                      return null;
+                    },
+                  ) : Container(),
+                  _value == 4 ? SizedBox(
+                      height: 60,
+                      child: DropdownButton(
+                          value: _value2,
+                          items: const [
+                            DropdownMenuItem(
+                              child: Text("Полное погашение"),
+                              value: 1,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Частичное погашение"),
+                              value: 2,
+                            ),
+                          ],
+                          onChanged: (value){
+                            setState((){
+                              _value2 = value;
+                              Navigator.pop(context);
+                              displayPaymentTypeDialog();
+                            });
+                          },
+                          hint:const Text("Select item")
+                      )
+                  ) : Container(),
+                  _value2 == 2 ? TextFormField(
+                    controller: amountController,
+                    decoration: const InputDecoration(hintText: "Введите сумму"),
+                    keyboardType: TextInputType.phone,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                    ],
+                    maxLength: 30,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Введите сумму';
                       }
                       return null;
                     },
@@ -261,48 +303,90 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Комментарий'),
+            title: const Text('Отказ'),
             content: SizedBox(
-              height: 150,
+              height: 360,
               child: Column(
                 children: [
-                  SizedBox(
-                      height: 60,
-                      child: DropdownButton(
-                          value: _value2,
-                          items: const [
-                            DropdownMenuItem(
-                              child: Text("Истек срок годности"),
-                              value: 1,
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Жидкость в упаковке"),
-                              value: 2,
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Развакуум"),
-                              value: 3,
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Нарушенная упаковка"),
-                              value: 4,
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Другое"),
-                              value: 5,
-                            )
-                          ],
-                          onChanged: (value){
-                            setState((){
-                              _value2 = value;
-                              Navigator.pop(context);
-                              displayTextInputDialog();
-                            });
-                          },
-                          hint:const Text("Select item")
-                      )
-                  ),
-                  _value2 == 5 ? TextFormField(
+                  Row(children: [
+                    const Text("Истек срок годности"),
+                    Checkbox(
+                      value: listOfCheckboxes[0],
+                      onChanged: (value){
+                        setState(() {
+                          listOfCheckboxes[0] = value!;
+                          Navigator.pop(context);
+                          displayTextInputDialog();
+                        });
+                      },
+                    )
+                  ]),
+                  Row(children: [
+                    const Text("Жидкость в упаковке"),
+                    Checkbox(
+                      value: listOfCheckboxes[1],
+                      onChanged: (value){
+                        setState(() {
+                          listOfCheckboxes[1] = value!;
+                          Navigator.pop(context);
+                          displayTextInputDialog();
+                        });
+                      },
+                    )
+                  ]),
+                  Row(children: [
+                    const Text("Развакуум"),
+                    Checkbox(
+                      value: listOfCheckboxes[2],
+                      onChanged: (value){
+                        setState(() {
+                          listOfCheckboxes[2] = value!;
+                          Navigator.pop(context);
+                          displayTextInputDialog();
+                        });
+                      },
+                    )
+                  ]),
+                  Row(children: [
+                    const Text("Нарушенная упаковка"),
+                    Checkbox(
+                      value: listOfCheckboxes[3],
+                      onChanged: (value){
+                        setState(() {
+                          listOfCheckboxes[3] = value!;
+                          Navigator.pop(context);
+                          displayTextInputDialog();
+                        });
+                      },
+                    )
+                  ]),
+                  Row(children: [
+                    const Text("Нарушенная упаковка"),
+                    Checkbox(
+                      value: listOfCheckboxes[4],
+                      onChanged: (value){
+                        setState(() {
+                          listOfCheckboxes[4] = value!;
+                          Navigator.pop(context);
+                          displayTextInputDialog();
+                        });
+                      },
+                    )
+                  ]),
+                  Row(children: [
+                    const Text("Другое"),
+                    Checkbox(
+                      value: listOfCheckboxes[5],
+                      onChanged: (value){
+                        setState(() {
+                          listOfCheckboxes[5] = value!;
+                          Navigator.pop(context);
+                          displayTextInputDialog();
+                        });
+                      },
+                    )
+                  ]),
+                  listOfCheckboxes[5] ? TextFormField(
                     controller: commentController,
                     decoration: const InputDecoration(hintText: "Введите причину"),
                     maxLength: 30,
@@ -357,38 +441,94 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
 
   void finishOrder(int paymentType, String number) async{
     String status = '';
-    OrdersProvider().changePaymentType(widget.order.orderId.toString(), paymentType, number).then((value) => status = value).whenComplete((){
-      if (status == 'Success'){
-        Navigator.pushAndRemoveUntil<dynamic>(context, MaterialPageRoute<dynamic>(
-          builder: (BuildContext context) => HomePage(),
-        ), (route) => false);
+    String amount = '0';
+    bool paymentFull = true;
+    _value2 == 2 ? paymentFull = false : null;
+    if (_value == 4 && _value2 == 2){
+      if (amountController.text != ''){
+        amount = amountController.text;
+        OrdersProvider().changePaymentType(widget.order.orderId.toString(), paymentType, number, paymentFull, amount).then((value) => status = value).whenComplete((){
+          if (status == 'Success'){
+            Navigator.pushAndRemoveUntil<dynamic>(context, MaterialPageRoute<dynamic>(
+              builder: (BuildContext context) => HomePage(),
+            ), (route) => false);
+          }
+          else{
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
+            ));
+          }
+        });
       }
       else{
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
+          content: Text("Заполните поле.", style: TextStyle(fontSize: 20)),
         ));
       }
-    });
+    }
+    else{
+      OrdersProvider().changePaymentType(widget.order.orderId.toString(), paymentType, number, paymentFull, amount).then((value) => status = value).whenComplete((){
+        if (status == 'Success'){
+          Navigator.pushAndRemoveUntil<dynamic>(context, MaterialPageRoute<dynamic>(
+            builder: (BuildContext context) => HomePage(),
+          ), (route) => false);
+        }
+        else{
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
+          ));
+        }
+      });
+    }
   }
 
   void cancelOrder() async{
     String status = '';
     String comment = '';
 
-    _value2 == 5 ? comment = commentController.text : comment = causes[int.parse(_value2.toString())-1];
+    for (int i = 0; i < listOfCheckboxes.length; i++){
+      if (listOfCheckboxes[i] == true){
+        i == 5 ? comment += causes[i] + ' ' : comment += causes[i] + ', ';
+      }
+    }
 
-    OrdersProvider().reject(widget.order.orderId.toString(), comment).then((value) => status = value).whenComplete((){
-      if (status == 'Success'){
-        Navigator.pushAndRemoveUntil<dynamic>(context, MaterialPageRoute<dynamic>(
-            builder: (BuildContext context) => HomePage(),
-          ), (route) => false);
+    listOfCheckboxes[5] ? comment += commentController.text : null;
+
+    if (listOfCheckboxes[5] == true){
+      if(commentController.text != ''){
+        OrdersProvider().reject(widget.order.orderId.toString(), comment).then((value) => status = value).whenComplete((){
+          if (status == 'Success'){
+            Navigator.pushAndRemoveUntil<dynamic>(context, MaterialPageRoute<dynamic>(
+              builder: (BuildContext context) => HomePage(),
+            ), (route) => false);
+          }
+          else{
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
+            ));
+          }
+        });
       }
       else{
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
+          content: Text("Заполните поле.", style: TextStyle(fontSize: 20)),
         ));
       }
-    });
+    }
+    else{
+      OrdersProvider().reject(widget.order.orderId.toString(), comment).then((value) => status = value).whenComplete((){
+        if (status == 'Success'){
+          Navigator.pushAndRemoveUntil<dynamic>(context, MaterialPageRoute<dynamic>(
+            builder: (BuildContext context) => HomePage(),
+          ), (route) => false);
+        }
+        else{
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
+          ));
+        }
+      });
+    }
   }
 
   void editOrder(){
