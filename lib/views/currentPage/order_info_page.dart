@@ -310,6 +310,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                 children: [
                   Row(children: [
                     const Text("Истек срок годности"),
+                    const Spacer(),
                     Checkbox(
                       value: listOfCheckboxes[0],
                       onChanged: (value){
@@ -323,6 +324,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                   ]),
                   Row(children: [
                     const Text("Жидкость в упаковке"),
+                    const Spacer(),
                     Checkbox(
                       value: listOfCheckboxes[1],
                       onChanged: (value){
@@ -336,6 +338,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                   ]),
                   Row(children: [
                     const Text("Развакуум"),
+                    const Spacer(),
                     Checkbox(
                       value: listOfCheckboxes[2],
                       onChanged: (value){
@@ -349,6 +352,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                   ]),
                   Row(children: [
                     const Text("Нарушенная упаковка"),
+                    const Spacer(),
                     Checkbox(
                       value: listOfCheckboxes[3],
                       onChanged: (value){
@@ -362,6 +366,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                   ]),
                   Row(children: [
                     const Text("Нарушенная упаковка"),
+                    const Spacer(),
                     Checkbox(
                       value: listOfCheckboxes[4],
                       onChanged: (value){
@@ -375,6 +380,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                   ]),
                   Row(children: [
                     const Text("Другое"),
+                    const Spacer(),
                     Checkbox(
                       value: listOfCheckboxes[5],
                       onChanged: (value){
