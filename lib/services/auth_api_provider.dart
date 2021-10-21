@@ -52,4 +52,26 @@ class AuthProvider{
       return 'Error';
     }
   }
+
+  Future<Map<String, dynamic>> getProfileInfo(int id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+
+    final response = await http.get(
+      Uri.parse(API_URL + 'api/delivery-order/my-payments-info'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization' : "Bearer $token"
+      },
+    );
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> result = jsonDecode(response.body);
+      return result;
+    }
+    else {
+      final result = {'data' : 'Error'};
+      return result;
+    }
+  }
 }

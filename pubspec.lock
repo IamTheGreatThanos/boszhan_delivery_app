@@ -121,7 +121,7 @@ packages:
     source: hosted
     version: "0.4.1"
   esc_pos_utils:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: esc_pos_utils
       url: "https://pub.dartlang.org"
@@ -297,7 +297,7 @@ packages:
     source: hosted
     version: "4.0.0"
   image:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: image
       url: "https://pub.dartlang.org"

@@ -1,8 +1,7 @@
 import 'package:boszhan_delivery_app/components/history_product_card.dart';
 import 'package:boszhan_delivery_app/models/history_order.dart';
-import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
+import 'package:boszhan_delivery_app/views/historyPage/printing_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 
 class HistoryOrderInfoPage extends StatefulWidget {
   const HistoryOrderInfoPage(this.order);
@@ -14,14 +13,14 @@ class HistoryOrderInfoPage extends StatefulWidget {
 
 class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
 
-  PrinterBluetoothManager _printerManager = PrinterBluetoothManager();
-  BluetoothManager bluetoothManager = BluetoothManager.instance;
-  List<PrinterBluetooth> _devices = [];
-
   @override
   void initState() {
-    initPrinter();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -60,28 +59,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
   }
 
   void toPrint(){
-    print('Printing');
-    if (_devices.isEmpty){
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Нет подключенных принтеров!", style: TextStyle(fontSize: 20)),
-      ));
-    }
-  }
-
-  void initPrinter() async {
-    _printerManager.startScan(const Duration(seconds: 5));
-    _printerManager.scanResults.listen((event) {
-      if (!mounted) return;
-      setState(() => _devices = event);
-
-      if (_devices.isEmpty){
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Нет подключенных принтеров!", style: TextStyle(fontSize: 20)),
-        ));
-      }
-
-    });
-    print(_devices);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Print(widget.order.basket)));
   }
 
 }

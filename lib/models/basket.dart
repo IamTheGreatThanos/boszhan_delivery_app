@@ -7,15 +7,12 @@ class Basket {
   int measureId = 0;
   String name1c = '';
   String name = '';
-  String image = '';
   int price = 0;
   String remainder = '';
   String createdAt = '';
   String updatedAt = '';
   bool enabled = false;
   int rating = 0;
-  String imageOptimized = '';
-  String imageResized = '';
   int offPrice = 0;
   int priceA = 0;
   int productId = 0;
@@ -32,15 +29,12 @@ class Basket {
     required this.measureId,
     required this.name1c,
     required this.name,
-    required this.image,
     required this.price,
     required this.remainder,
     required this.createdAt,
     required this.updatedAt,
     required this.enabled,
     required this.rating,
-    required this.imageOptimized,
-    required this.imageResized,
     required this.offPrice,
     required this.productId,
     required this.priceA,
@@ -58,15 +52,12 @@ class Basket {
     measureId = json['measure_id'];
     name1c = json['name_1c'];
     name = json['name'];
-    image = json['image'];
     price = json['price'];
     remainder = json['remainder'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     enabled = json['enabled'];
     rating = json['rating'];
-    imageOptimized = json['image_optimized'];
-    imageResized = json['image_resized'];
     offPrice = json['off_price'];
     priceA = json['price_a'];
     productId = json['product_id'];
@@ -85,15 +76,12 @@ class Basket {
     data['measure_id'] = measureId;
     data['name_1c'] = name1c;
     data['name'] = name;
-    data['image'] = image;
     data['price'] = price;
     data['remainder'] = remainder;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['enabled'] = enabled;
     data['rating'] = rating;
-    data['image_optimized'] = imageOptimized;
-    data['image_resized'] = imageResized;
     data['off_price'] = offPrice;
     data['price_a'] = priceA;
     data['product_id'] = productId;

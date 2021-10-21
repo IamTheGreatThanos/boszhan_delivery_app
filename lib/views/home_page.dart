@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:boszhan_delivery_app/models/history_order.dart';
+import 'package:boszhan_delivery_app/services/auth_api_provider.dart';
 import 'package:boszhan_delivery_app/services/history_api_provider.dart';
 import 'package:boszhan_delivery_app/services/orders_api_provider.dart';
 import 'package:boszhan_delivery_app/views/currentPage/current_orders_page.dart';
@@ -9,11 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../main.dart';
 
 class HomePage extends StatefulWidget {
-  // HomePage(this.product);
-  // final Product product;
+
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -21,9 +20,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  String name = '';
+  String nal = '';
+  String bezNal = '';
+
   @override
   void initState() {
     downloadAction();
+    getProfileInfo();
     super.initState();
 
     // flutterLocalNotificationsPlugin.show(0, "Testing", "Hello user?",
@@ -63,22 +67,33 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: Text(
-                  'Имя водителя: Водитель №1.',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
+                    'Версия: 1.0',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                child: Text(
-                  'Версия: 1.0.0',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                child: Text('Имя водителя: ' + name,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Text('Наличные: ' + nal,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                child: Text('Безналичные: ' + bezNal,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
                 ),
               ),
               Image.asset(
                 "assets/images/logo.png",
-                width: MediaQuery.of(context).size.width*0.5
+                width: MediaQuery.of(context).size.width*0.4
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -201,6 +216,28 @@ class _HomePageState extends State<HomePage> {
           var jsonString = jsonEncode(responseData['data']);
           prefs.setString('DownloadedHistoryData', jsonString);
         }
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
+        ));
+      }
+    });
+  }
+
+  void getProfileInfo() async{
+    Future<Map<String, dynamic>> response = AuthProvider().getProfileInfo(1);
+    Map<String, dynamic> responseData = {};
+
+    response.then((value) {
+      setState(() {
+        responseData = value;
+      });
+    }).whenComplete((){
+      if (responseData['data'] != 'Error'){
+        name = responseData['full_name'];
+        nal = responseData['cash'].toString() + ' тг.';
+        bezNal = responseData['card'].toString() + ' тг.';
       }
       else{
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

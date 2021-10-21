@@ -451,7 +451,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
     bool paymentFull = true;
     _value2 == 2 ? paymentFull = false : null;
     if (_value == 4 && _value2 == 2){
-      if (amountController.text != ''){
+      if (amountController.text != '' && int.parse(amountController.text) < widget.order.totalCost){
         amount = amountController.text;
         OrdersProvider().changePaymentType(widget.order.orderId.toString(), paymentType, number, paymentFull, amount).then((value) => status = value).whenComplete((){
           if (status == 'Success'){
@@ -468,7 +468,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
       }
       else{
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Заполните поле.", style: TextStyle(fontSize: 20)),
+          content: Text("Заполните поле или введите корректное значение.", style: TextStyle(fontSize: 20)),
         ));
       }
     }
