@@ -15,9 +15,6 @@ class HistoryOrder {
   var deliveredAt;
   var deletedAt;
   int status = 0;
-  String paymentAt = '';
-  bool dogovor = false;
-  String bin = '';
 
   HistoryOrder({
     required this.name,
@@ -33,9 +30,6 @@ class HistoryOrder {
     this.deliveredAt,
     this.deletedAt,
     required this.status,
-    required this.paymentAt,
-    required this.dogovor,
-    required this.bin,
   });
 
   HistoryOrder.fromJson(Map<String, dynamic> json) {
@@ -58,9 +52,6 @@ class HistoryOrder {
     deliveredAt = json['delivered_at'];
     deletedAt = json['deleted_at'];
     status = json['status'];
-    paymentAt = json['payment_at'];
-    dogovor = json['dogovor'];
-    bin = json['bin'];
   }
 
   Map<String, dynamic> toJson() {
@@ -78,9 +69,6 @@ class HistoryOrder {
     data['delivered_at'] = deliveredAt;
     data['deleted_at'] = deletedAt;
     data['status'] = status;
-    data['payment_at'] = paymentAt;
-    data['dogovor'] = dogovor;
-    data['bin'] = bin;
     return data;
   }
 }

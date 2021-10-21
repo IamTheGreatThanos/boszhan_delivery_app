@@ -139,18 +139,30 @@ class _CheckingVersionPageState extends State<CheckingVersionPage> {
         responseData = value;
       });
     }).whenComplete(() {
-      if (responseData['data'] != 'Error' && responseData['data'][1]['version'] == '1') {
-        Navigator.pushAndRemoveUntil<dynamic>(context, MaterialPageRoute<dynamic>(
-          builder: (BuildContext context) => const LoginPage(),
-        ), (route) => false);
+      if (responseData['data'] != 'Error' ) {
+        for (Map<String, dynamic> obj in responseData['data']){
+          if (obj['application_type'] == 2){
+            if( obj['version'] == '1.0'){
+              Navigator.pushAndRemoveUntil<dynamic>(context, MaterialPageRoute<dynamic>(
+                builder: (BuildContext context) => const LoginPage(),
+              ), (route) => false);
+            }
+            else{
+              setState(() {
+                isNotValidVersion = true;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text(
+                    "Скачайте актуальную версию", style: TextStyle(fontSize: 20)),
+              ));
+            }
+          }
+        }
       }
       else {
-        setState(() {
-          isNotValidVersion = true;
-        });
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
-              "Скачайте актуальную версию", style: TextStyle(fontSize: 20)),
+              "Something went wrong.", style: TextStyle(fontSize: 20)),
         ));
       }
     });

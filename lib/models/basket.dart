@@ -14,7 +14,6 @@ class Basket {
   String updatedAt = '';
   bool enabled = false;
   int rating = 0;
-  int presaleId = 0;
   String imageOptimized = '';
   String imageResized = '';
   int offPrice = 0;
@@ -39,7 +38,6 @@ class Basket {
     required this.createdAt,
     required this.updatedAt,
     required this.enabled,
-    required this.presaleId,
     required this.rating,
     required this.imageOptimized,
     required this.imageResized,
@@ -67,7 +65,6 @@ class Basket {
     updatedAt = json['updated_at'];
     enabled = json['enabled'];
     rating = json['rating'];
-    presaleId = json['presale_id'];
     imageOptimized = json['image_optimized'];
     imageResized = json['image_resized'];
     offPrice = json['off_price'];
@@ -95,7 +92,6 @@ class Basket {
     data['updated_at'] = updatedAt;
     data['enabled'] = enabled;
     data['rating'] = rating;
-    data['presale_id'] = presaleId;
     data['image_optimized'] = imageOptimized;
     data['image_resized'] = imageResized;
     data['off_price'] = offPrice;
