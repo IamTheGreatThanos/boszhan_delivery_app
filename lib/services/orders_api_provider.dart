@@ -59,6 +59,32 @@ class OrdersProvider {
     }
   }
 
+  Future<String> sendWinningData(String id, String phone, String name) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+
+    final response = await http.post(
+      Uri.parse(API_URL + 'api/delivery-order/' + id + '/winning'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization' : "Bearer $token"
+      },
+      body: jsonEncode(<String, dynamic>{
+        "winning_name" : name,
+        "winning_phone" : phone
+      }),
+    );
+
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      return 'Success';
+    }
+    else {
+      return 'Error';
+    }
+  }
+
   Future<String> reject(String id, String comment) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');

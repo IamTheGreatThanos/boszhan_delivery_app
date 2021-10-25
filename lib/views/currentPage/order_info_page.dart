@@ -22,6 +22,8 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
 
   TextEditingController commentController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+  TextEditingController winningNameController = TextEditingController();
+  TextEditingController winningPhoneController = TextEditingController();
   TextEditingController amountController = TextEditingController();
   final _mobileFormatter = NumberTextInputFormatter();
   Object? _value = 1;
@@ -72,11 +74,11 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width*0.3,
+                    width: MediaQuery.of(context).size.width*0.29,
                     height: MediaQuery.of(context).size.width*0.1,
                     child: ElevatedButton.icon(
                       icon: const Icon(Icons.assignment_rounded, color: Colors.white),
-                      label: const Text('Выполнить'),
+                      label: const Text('Выполнить', style: TextStyle(fontSize: 16)),
                       onPressed: isButtonDisabled ? null : displayPaymentTypeDialog,
                       style: ElevatedButton.styleFrom(
                         primary: Colors.green,
@@ -88,11 +90,11 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width*0.3,
+                    width: MediaQuery.of(context).size.width*0.29,
                     height: MediaQuery.of(context).size.width*0.1,
                     child: ElevatedButton.icon(
                       icon: const Icon(Icons.cancel, color: Colors.white),
-                      label: const Text('Отказ'),
+                      label: const Text('Отказ', style: TextStyle(fontSize: 16),),
                       onPressed: isButtonDisabled ? null : displayTextInputDialog,
                       style: ElevatedButton.styleFrom(
                         primary: Colors.red,
@@ -104,11 +106,11 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width*0.3,
+                    width: MediaQuery.of(context).size.width*0.29,
                     height: MediaQuery.of(context).size.width*0.1,
                     child: ElevatedButton.icon(
                       icon: const Icon(Icons.add_circle, color: Colors.white),
-                      label: const Text('Изменить'),
+                      label: const Text('Изменить', style: TextStyle(fontSize: 16)),
                       onPressed: isButtonDisabled ? null : editOrder,
                       style: ElevatedButton.styleFrom(
                         primary: Colors.blue,
@@ -298,6 +300,84 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
     );
   }
 
+  Future<void> displayWinningDialog() async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Поздравляем'),
+            content: SizedBox(
+              height: 200,
+              child: Column(
+                children: [
+                  Text('У заказчика есть выигрыш: ' + widget.order.bonusGameSum.toString() + ' тг'),
+                  TextFormField(
+                    controller: winningPhoneController,
+                    decoration: const InputDecoration(hintText: "Номер телефона kaspi.kz"),
+                    keyboardType: TextInputType.phone,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                      _mobileFormatter,
+                    ],
+                    maxLength: 12,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Номер телефона';
+                      } else if (!value.contains('+')) {
+                        return 'Введите корректный номер телефона';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    controller: winningNameController,
+                    decoration: const InputDecoration(hintText: "Введите имя получателя"),
+                    maxLength: 30,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Введите имя';
+                      }
+                      return null;
+                    },
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                color: Colors.red,
+                textColor: Colors.white,
+                child: const Text('Отмена'),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              FlatButton(
+                color: Colors.green,
+                textColor: Colors.white,
+                child: const Text('Сохранить'),
+                onPressed: () async {
+                  var connectivityResult = await (Connectivity().checkConnectivity());
+                  if (connectivityResult == ConnectivityResult.mobile) {
+                    sendWinningData();
+                  } else if (connectivityResult == ConnectivityResult.wifi) {
+                    sendWinningData();
+                  }
+                  else{
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Соединение с интернетом отсутствует.", style: TextStyle(fontSize: 20)),
+                    ));
+                  }
+                },
+              ),
+            ],
+          );
+        }
+    );
+  }
+
   Future<void> displayTextInputDialog() async {
     return showDialog(
         context: context,
@@ -455,9 +535,15 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
         amount = amountController.text;
         OrdersProvider().changePaymentType(widget.order.orderId.toString(), paymentType, number, paymentFull, amount).then((value) => status = value).whenComplete((){
           if (status == 'Success'){
-            Navigator.pushAndRemoveUntil<dynamic>(context, MaterialPageRoute<dynamic>(
-              builder: (BuildContext context) => HomePage(),
-            ), (route) => false);
+            Navigator.pop(context);
+            if (widget.order.bonusGameSum != 0){
+              displayWinningDialog();
+            }
+            else{
+              Navigator.pushAndRemoveUntil<dynamic>(context, MaterialPageRoute<dynamic>(
+                builder: (BuildContext context) => HomePage(),
+              ), (route) => false);
+            }
           }
           else{
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -475,9 +561,14 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
     else{
       OrdersProvider().changePaymentType(widget.order.orderId.toString(), paymentType, number, paymentFull, amount).then((value) => status = value).whenComplete((){
         if (status == 'Success'){
-          Navigator.pushAndRemoveUntil<dynamic>(context, MaterialPageRoute<dynamic>(
-            builder: (BuildContext context) => HomePage(),
-          ), (route) => false);
+          if (widget.order.bonusGameSum != 0){
+            displayWinningDialog();
+          }
+          else{
+            Navigator.pushAndRemoveUntil<dynamic>(context, MaterialPageRoute<dynamic>(
+              builder: (BuildContext context) => HomePage(),
+            ), (route) => false);
+          }
         }
         else{
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -486,6 +577,29 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
         }
       });
     }
+  }
+
+  void sendWinningData() async{
+    String status = '';
+    if (winningPhoneController.text != '' && winningNameController.text != ''){
+        OrdersProvider().sendWinningData(widget.order.orderId.toString(), winningPhoneController.text.substring(2), winningNameController.text).then((value) => status = value).whenComplete((){
+          if (status == 'Success'){
+            Navigator.pushAndRemoveUntil<dynamic>(context, MaterialPageRoute<dynamic>(
+              builder: (BuildContext context) => HomePage(),
+            ), (route) => false);
+          }
+          else{
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
+            ));
+          }
+        });
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Заполните поле или введите корректное значение.", style: TextStyle(fontSize: 20)),
+        ));
+      }
   }
 
   void cancelOrder() async{
