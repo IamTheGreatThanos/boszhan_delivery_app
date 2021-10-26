@@ -12,7 +12,6 @@ class HistoryOrderInfoPage extends StatefulWidget {
 }
 
 class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
-
   @override
   void initState() {
     super.initState();
@@ -26,40 +25,43 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        title: const Text('Выполненные заказы', style: TextStyle(color: Colors.white, fontSize: 20)),
-        actions: <Widget>[
-          widget.order.status == 3 ? Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () {
-                toPrint();
-              },
-              child: const Icon(
-                  Icons.print
-              ),
-            )
-          ) : const SizedBox(),
-        ],
-        automaticallyImplyLeading: true,
-        backgroundColor: Colors.red,
-        shadowColor: Colors.white,
-        bottomOpacity: 1,
-        iconTheme: const IconThemeData(color: Colors.white)
-      ),
-      body: ListView.separated(itemCount: widget.order.basket.length,
-        itemBuilder: (BuildContext context, int index) => widget.order.basket[index].type == 0 ? HistoryProductCard(widget.order.basket[index]) : Ink(color: Colors.red[50], child: HistoryProductCard(widget.order.basket[index])),
-        separatorBuilder: (context, index){
-          return const Divider();
-        }
-      )
-    );
+        appBar: AppBar(
+            elevation: 0,
+            centerTitle: true,
+            title: const Text('Выполненные заказы',
+                style: TextStyle(color: Colors.white, fontSize: 20)),
+            actions: <Widget>[
+              widget.order.status == 3
+                  ? Padding(
+                      padding: const EdgeInsets.only(right: 20.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          toPrint();
+                        },
+                        child: const Icon(Icons.print),
+                      ))
+                  : const SizedBox(),
+            ],
+            automaticallyImplyLeading: true,
+            backgroundColor: Colors.red,
+            shadowColor: Colors.white,
+            bottomOpacity: 1,
+            iconTheme: const IconThemeData(color: Colors.white)),
+        body: ListView.separated(
+            itemCount: widget.order.basket.length,
+            itemBuilder: (BuildContext context, int index) =>
+                widget.order.basket[index].type == 0
+                    ? HistoryProductCard(widget.order.basket[index])
+                    : Ink(
+                        color: Colors.red[50],
+                        child: HistoryProductCard(widget.order.basket[index])),
+            separatorBuilder: (context, index) {
+              return const Divider();
+            }));
   }
 
-  void toPrint(){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Print(widget.order.basket)));
+  void toPrint() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => Print(widget.order.basket)));
   }
-
 }
