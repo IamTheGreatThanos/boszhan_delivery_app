@@ -1,7 +1,9 @@
 import 'package:boszhan_delivery_app/components/history_product_card.dart';
 import 'package:boszhan_delivery_app/models/history_order.dart';
+import 'package:boszhan_delivery_app/utils/const.dart';
 import 'package:boszhan_delivery_app/views/historyPage/printing_page.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HistoryOrderInfoPage extends StatefulWidget {
   const HistoryOrderInfoPage(this.order);
@@ -12,8 +14,20 @@ class HistoryOrderInfoPage extends StatefulWidget {
 }
 
 class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
+  bool isContainsReturns = false;
+  bool isContainsDeliveryBasket = false;
+
   @override
   void initState() {
+    for (var i in widget.order.basket) {
+      if (i.type == 1) {
+        setState(() {
+          isContainsReturns = true;
+        });
+      } else {
+        isContainsDeliveryBasket = true;
+      }
+    }
     super.initState();
   }
 
@@ -36,7 +50,95 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                       padding: const EdgeInsets.only(right: 20.0),
                       child: GestureDetector(
                         onTap: () {
-                          toPrint();
+                          showModalBottomSheet(
+                              context: context,
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(15.0),
+                                      topRight: Radius.circular(15.0))),
+                              builder: (context) {
+                                return Container(
+                                  height:
+                                      MediaQuery.of(context).size.height / 3,
+                                  color: Colors.transparent,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.all(20),
+                                        child: Text(
+                                            'Что вы хотите распечатать?',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold)),
+                                      ),
+                                      isContainsDeliveryBasket
+                                          ? Padding(
+                                              padding: const EdgeInsets.all(10),
+                                              child: SizedBox(
+                                                width: 400,
+                                                height: 60,
+                                                child: ElevatedButton.icon(
+                                                  icon: const Icon(
+                                                      Icons
+                                                          .my_library_books_rounded,
+                                                      color: Colors.white),
+                                                  label: const Text(
+                                                      "Расходная накладная"),
+                                                  onPressed: () {
+                                                    launch(AppConstants
+                                                            .baseUrl +
+                                                        'api/delivery-order/' +
+                                                        widget.order.id
+                                                            .toString() +
+                                                        '/rnk');
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    primary: Colors.green,
+                                                    textStyle: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18),
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          : Container(),
+                                      isContainsReturns
+                                          ? Padding(
+                                              padding: const EdgeInsets.all(10),
+                                              child: SizedBox(
+                                                width: 400,
+                                                height: 60,
+                                                child: ElevatedButton.icon(
+                                                  icon: const Icon(
+                                                      Icons
+                                                          .assignment_return_sharp,
+                                                      color: Colors.white),
+                                                  label: const Text("Возвраты"),
+                                                  onPressed: () {
+                                                    launch(AppConstants
+                                                            .baseUrl +
+                                                        'api/delivery-order/' +
+                                                        widget.order.id
+                                                            .toString() +
+                                                        '/vozvrat');
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    primary: Colors.red,
+                                                    textStyle: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18),
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          : Container(),
+                                    ],
+                                  ),
+                                );
+                              });
                         },
                         child: const Icon(Icons.print),
                       ))
