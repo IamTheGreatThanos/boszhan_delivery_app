@@ -31,8 +31,7 @@ class ProductCard extends StatelessWidget {
                 Spacer(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
-                      'Сумма(шт,кг):  ' + basket.price.toString() + ' ₸',
+                  child: Text('Цена(шт,кг):  ' + basket.price.toString() + ' ₸',
                       style: TextStyle(fontSize: 18)),
                 ),
               ],
