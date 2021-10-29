@@ -59,7 +59,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                               builder: (context) {
                                 return Container(
                                   height:
-                                      MediaQuery.of(context).size.height / 3,
+                                      MediaQuery.of(context).size.height / 2,
                                   color: Colors.transparent,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -127,6 +127,36 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                                                   style:
                                                       ElevatedButton.styleFrom(
                                                     primary: Colors.red,
+                                                    textStyle: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18),
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          : Container(),
+                                      widget.order.paymentType == 1
+                                          ? Padding(
+                                              padding: const EdgeInsets.all(10),
+                                              child: SizedBox(
+                                                width: 400,
+                                                height: 60,
+                                                child: ElevatedButton.icon(
+                                                  icon: const Icon(
+                                                      Icons.fact_check,
+                                                      color: Colors.white),
+                                                  label: const Text("ПКО"),
+                                                  onPressed: () {
+                                                    launch(AppConstants
+                                                            .baseUrl +
+                                                        'api/delivery-order/' +
+                                                        widget.order.id
+                                                            .toString() +
+                                                        '/pko');
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    primary: Colors.grey,
                                                     textStyle: const TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 18),

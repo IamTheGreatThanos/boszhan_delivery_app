@@ -26,7 +26,7 @@ class Order {
     required this.totalCost,
     required this.totalReturnsCost,
     required this.counterpartyName,
-    required this.bonusGameSum
+    required this.bonusGameSum,
   });
 
   Order.fromJson(Map<String, dynamic> json) {

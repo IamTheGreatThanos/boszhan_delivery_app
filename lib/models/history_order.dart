@@ -15,22 +15,23 @@ class HistoryOrder {
   var deliveredAt;
   var deletedAt;
   int status = 0;
+  int paymentType = 0;
 
-  HistoryOrder({
-    required this.name,
-    required this.storeAddress,
-    required this.id,
-    required this.userId,
-    required this.deliveryTime,
-    required this.basket,
-    required this.address,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.storeId,
-    this.deliveredAt,
-    this.deletedAt,
-    required this.status,
-  });
+  HistoryOrder(
+      {required this.name,
+      required this.storeAddress,
+      required this.id,
+      required this.userId,
+      required this.deliveryTime,
+      required this.basket,
+      required this.address,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.storeId,
+      this.deliveredAt,
+      this.deletedAt,
+      required this.status,
+      required this.paymentType});
 
   HistoryOrder.fromJson(Map<String, dynamic> json) {
     name = json['store_name'];
@@ -45,13 +46,14 @@ class HistoryOrder {
       });
     }
     address =
-    (json['address'] != null ? Address.fromJson(json['address']) : null)!;
+        (json['address'] != null ? Address.fromJson(json['address']) : null)!;
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     storeId = json['store_id'];
     deliveredAt = json['delivered_at'];
     deletedAt = json['deleted_at'];
     status = json['status'];
+    paymentType = json['payment_type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -69,6 +71,7 @@ class HistoryOrder {
     data['delivered_at'] = deliveredAt;
     data['deleted_at'] = deletedAt;
     data['status'] = status;
+    data['payment_type'] = paymentType;
     return data;
   }
 }
