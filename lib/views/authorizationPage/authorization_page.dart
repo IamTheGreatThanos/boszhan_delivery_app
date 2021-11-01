@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    // emailController.text = 'driver1@mail.ru';
+    // emailController.text = 'driver1@foodkz.kz';
     // passwordController.text = '123456';
 
     getFCMToken();
