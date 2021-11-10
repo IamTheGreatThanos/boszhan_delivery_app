@@ -86,7 +86,7 @@ class OrderCard extends StatelessWidget {
                               launch(AppConstants.baseUrl +
                                   'api/delivery-order/' +
                                   order.id.toString() +
-                                  '/rnk');
+                                  '/before/rnk');
                             },
                             style: ElevatedButton.styleFrom(
                               primary: Colors.blue,
