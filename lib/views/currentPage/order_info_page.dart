@@ -74,7 +74,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                         widget.order.basket[index].type == 0
                             ? ProductCard(widget.order.basket[index])
                             : Ink(
-                                color: Colors.red[50],
+                                color: Colors.red[200],
                                 child: ProductCard(widget.order.basket[index])),
                     separatorBuilder: (context, index) {
                       return const Divider();

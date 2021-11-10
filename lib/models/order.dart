@@ -13,6 +13,7 @@ class Order {
   double totalReturnsCost = 0;
   String counterpartyName = '';
   int bonusGameSum = 0;
+  String payment_type_name = '';
 
   Order({
     required this.id,
@@ -27,6 +28,7 @@ class Order {
     required this.totalReturnsCost,
     required this.counterpartyName,
     required this.bonusGameSum,
+    required this.payment_type_name,
   });
 
   Order.fromJson(Map<String, dynamic> json) {
@@ -47,6 +49,7 @@ class Order {
     totalReturnsCost = double.parse(json['total_returns_cost'].toString());
     counterpartyName = json['counterparty_name'];
     bonusGameSum = json['bonus_game_sum'];
+    payment_type_name = json['payment_status_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -63,6 +66,7 @@ class Order {
     data['total_returns_cost'] = totalReturnsCost;
     data['counterparty_name'] = counterpartyName;
     data['bonus_game_sum'] = bonusGameSum;
+    data['payment_status_name'] = payment_type_name;
     return data;
   }
 }
