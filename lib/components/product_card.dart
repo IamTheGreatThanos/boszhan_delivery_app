@@ -2,7 +2,8 @@ import 'package:boszhan_delivery_app/models/basket.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard(this.basket);
+  const ProductCard(this.basket, this.index);
+  final int index;
   final Basket basket;
 
   @override
@@ -15,7 +16,7 @@ class ProductCard extends StatelessWidget {
               color: Colors.white,
             )),
         title: Text(
-          basket.name,
+          (index + 1).toString() + '. ' + basket.name,
           style: TextStyle(fontSize: 20),
         ),
         subtitle: Column(
