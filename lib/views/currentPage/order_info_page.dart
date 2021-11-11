@@ -659,7 +659,9 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
 
   void sendWinningData() async {
     String status = '';
-    if (winningPhoneController.text != '' && winningNameController.text != '') {
+    if (winningPhoneController.text != '' &&
+        winningNameController.text != '' &&
+        winningPhoneController.text.length == 12) {
       OrdersProvider()
           .sendWinningData(
               widget.order.orderId.toString(),
