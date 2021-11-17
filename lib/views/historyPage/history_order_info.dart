@@ -1,9 +1,12 @@
 import 'package:boszhan_delivery_app/components/history_product_card.dart';
 import 'package:boszhan_delivery_app/models/history_order.dart';
+import 'package:boszhan_delivery_app/services/orders_api_provider.dart';
 import 'package:boszhan_delivery_app/utils/const.dart';
 import 'package:boszhan_delivery_app/views/historyPage/printing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../home_page.dart';
 
 class HistoryOrderInfoPage extends StatefulWidget {
   const HistoryOrderInfoPage(this.order);
@@ -66,11 +69,33 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                                     children: [
                                       const Padding(
                                         padding: EdgeInsets.all(20),
-                                        child: Text(
-                                            'Что вы хотите распечатать?',
+                                        child: Text('Что вы хотите сделать?',
                                             style: TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold)),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: SizedBox(
+                                          width: 400,
+                                          height: 60,
+                                          child: ElevatedButton.icon(
+                                            icon: const Icon(
+                                                Icons.my_library_books_rounded,
+                                                color: Colors.white),
+                                            label:
+                                                const Text("Вернуть в текущие"),
+                                            onPressed: () {
+                                              changeStatus();
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              primary: Colors.blue,
+                                              textStyle: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18),
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                       isContainsDeliveryBasket
                                           ? Padding(
@@ -195,5 +220,16 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
   void toPrint() {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => Print(widget.order.basket)));
+  }
+
+  void changeStatus() async {
+    OrdersProvider()
+        .changeStatus(widget.order.id.toString(), 2)
+        .whenComplete(() => Navigator.pushAndRemoveUntil<dynamic>(
+            context,
+            MaterialPageRoute<dynamic>(
+              builder: (BuildContext context) => HomePage(),
+            ),
+            (route) => false));
   }
 }
