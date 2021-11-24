@@ -15,6 +15,8 @@ class HistoryOrderCard extends StatelessWidget {
       'Kaspi.kz',
     ];
 
+    List<String> paymentStatus = ['Оплачено', 'Не оплачено', 'Отменен'];
+
     // return _buildTiles(entry);
     return ListTile(
         leading: const CircleAvatar(
@@ -31,6 +33,8 @@ class HistoryOrderCard extends StatelessWidget {
             Text('Адрес: ' + order.storeAddress,
                 style: const TextStyle(fontSize: 20)),
             Text('Способ оплаты: ' + paymentsList[order.paymentType - 1],
+                style: const TextStyle(fontSize: 20)),
+            Text('Статус оплаты: ' + paymentStatus[order.paymentStatus - 1],
                 style: const TextStyle(fontSize: 20)),
           ],
         ),

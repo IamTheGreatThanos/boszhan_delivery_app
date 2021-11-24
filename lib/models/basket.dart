@@ -19,29 +19,29 @@ class Basket {
   int type = 0;
   double allPrice = 0;
   double count = 0;
+  bool isChecked = false;
 
-  Basket({
-    required this.id,
-    required this.id1c,
-    required this.article,
-    required this.brandId,
-    required this.categoryId,
-    required this.measureId,
-    required this.name1c,
-    required this.name,
-    required this.price,
-    required this.remainder,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.enabled,
-    required this.rating,
-    required this.offPrice,
-    required this.productId,
-    required this.priceA,
-    required this.type,
-    required this.allPrice,
-    required this.count
-  });
+  Basket(
+      {required this.id,
+      required this.id1c,
+      required this.article,
+      required this.brandId,
+      required this.categoryId,
+      required this.measureId,
+      required this.name1c,
+      required this.name,
+      required this.price,
+      required this.remainder,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.enabled,
+      required this.rating,
+      required this.offPrice,
+      required this.productId,
+      required this.priceA,
+      required this.type,
+      required this.allPrice,
+      required this.count});
 
   Basket.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -90,5 +90,4 @@ class Basket {
     data['count'] = count;
     return data;
   }
-
 }

@@ -27,7 +27,7 @@ class ChangeableProductCardState extends State<ChangeableProductCard> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      tileColor: color,
+      tileColor: widget.basket.isChecked == true ? Colors.green[200]! : color,
       leading: const CircleAvatar(
           backgroundColor: Colors.amber,
           child: Icon(
@@ -55,19 +55,17 @@ class ChangeableProductCardState extends State<ChangeableProductCard> {
           ),
           Text((widget.basket.measureId == 1 ? ' шт' : ' кг'),
               style: const TextStyle(fontSize: 20)),
-          // TextButton(
-          //   onPressed: () {
-          //     setState(() {
-          //       color == Colors.green[200]!
-          //           ? color = Colors.white
-          //           : color = Colors.green[200]!;
-          //     });
-          //   },
-          //   child: Icon(
-          //     Icons.check_box,
-          //     color: Colors.green,
-          //   ),
-          // )
+          TextButton(
+            onPressed: () {
+              setState(() {
+                widget.basket.isChecked = !widget.basket.isChecked;
+              });
+            },
+            child: Icon(
+              Icons.check_box,
+              color: Colors.green,
+            ),
+          )
         ]),
       ),
     );
