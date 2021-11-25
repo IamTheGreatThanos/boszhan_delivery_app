@@ -3,9 +3,10 @@ import 'package:boszhan_delivery_app/utils/const.dart';
 import 'package:flutter/material.dart';
 
 class ChangeableProductCard extends StatefulWidget {
-  const ChangeableProductCard(this.basket, this.indexOfTile);
+  const ChangeableProductCard(this.basket, this.indexOfTile, this.onChange);
   final Basket basket;
   final int indexOfTile;
+  final Function onChange;
 
   @override
   State<StatefulWidget> createState() {
@@ -57,13 +58,11 @@ class ChangeableProductCardState extends State<ChangeableProductCard> {
               style: const TextStyle(fontSize: 20)),
           TextButton(
             onPressed: () {
-              setState(() {
-                widget.basket.isChecked = !widget.basket.isChecked;
-              });
+              widget.onChange(widget.indexOfTile);
             },
             child: Icon(
-              Icons.check_box,
-              color: Colors.green,
+              Icons.delete,
+              color: Colors.red,
             ),
           )
         ]),

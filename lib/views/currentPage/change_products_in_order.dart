@@ -19,6 +19,9 @@ class ChangeProductsInOrderPage extends StatefulWidget {
 }
 
 class _ChangeProductsInOrderPageState extends State<ChangeProductsInOrderPage> {
+  late Order _order;
+  int indexForDelete = -1;
+
   @override
   void initState() {
     super.initState();
@@ -28,6 +31,13 @@ class _ChangeProductsInOrderPageState extends State<ChangeProductsInOrderPage> {
   void dispose() {
     AppConstants.index = -1;
     super.dispose();
+  }
+
+  void _onChangeData(newIndex) {
+    setState(() {
+      indexForDelete = newIndex;
+    });
+    displayAlertDialog(indexForDelete);
   }
 
   @override
@@ -56,7 +66,9 @@ class _ChangeProductsInOrderPageState extends State<ChangeProductsInOrderPage> {
                           ? InkWell(
                               child: NotificationListener(
                                 child: ChangeableProductCard(
-                                    widget.order.basket[index], index),
+                                    widget.order.basket[index],
+                                    index,
+                                    _onChangeData),
                                 onNotification: (message) {
                                   int ind = AppConstants.index;
                                   String val = AppConstants.value;
@@ -71,14 +83,20 @@ class _ChangeProductsInOrderPageState extends State<ChangeProductsInOrderPage> {
                                   return true;
                                 },
                               ),
-                              onTap: () => displayAlertDialog(
-                                  widget.order.basket[index].name, index))
+                              onTap: () {
+                                setState(() {
+                                  widget.order.basket[index].isChecked =
+                                      !widget.order.basket[index].isChecked;
+                                });
+                              })
                           : Ink(
                               color: Colors.red[50],
                               child: InkWell(
                                   child: NotificationListener(
                                     child: ChangeableProductCard(
-                                        widget.order.basket[index], index),
+                                        widget.order.basket[index],
+                                        index,
+                                        _onChangeData),
                                     onNotification: (message) {
                                       int ind = AppConstants.index;
                                       String val = AppConstants.value;
@@ -102,8 +120,13 @@ class _ChangeProductsInOrderPageState extends State<ChangeProductsInOrderPage> {
                                       return true;
                                     },
                                   ),
-                                  onTap: () => displayAlertDialog(
-                                      widget.order.basket[index].name, index))),
+                                  onTap: () {
+                                    setState(() {
+                                      widget.order.basket[index].isChecked =
+                                          !widget.order.basket[index].isChecked;
+                                    });
+                                    // displayAlertDialog(widget.order.basket[index].name, index);
+                                  })),
                   separatorBuilder: (context, index) {
                     return const Divider();
                   },
@@ -113,8 +136,41 @@ class _ChangeProductsInOrderPageState extends State<ChangeProductsInOrderPage> {
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    height: MediaQuery.of(context).size.width * 0.1,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: MediaQuery.of(context).size.width * 0.12,
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.history, color: Colors.white),
+                      label: const Text('В исходное состояние'),
+                      onPressed: () async {
+                        var connectivityResult =
+                            await (Connectivity().checkConnectivity());
+                        if (connectivityResult == ConnectivityResult.mobile) {
+                          toHistory();
+                        } else if (connectivityResult ==
+                            ConnectivityResult.wifi) {
+                          toHistory();
+                        } else {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text(
+                                "Соединение с интернетом отсутствует.",
+                                style: TextStyle(fontSize: 20)),
+                          ));
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.blue,
+                        textStyle:
+                            const TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: MediaQuery.of(context).size.width * 0.12,
                     child: ElevatedButton.icon(
                       icon: const Icon(Icons.assignment_rounded,
                           color: Colors.white),
@@ -184,13 +240,24 @@ class _ChangeProductsInOrderPageState extends State<ChangeProductsInOrderPage> {
     });
   }
 
-  Future<void> displayAlertDialog(String name, int index) async {
+  void toHistory() {
+    Navigator.pushAndRemoveUntil<dynamic>(
+        context,
+        MaterialPageRoute<dynamic>(
+          builder: (BuildContext context) => HomePage(),
+        ),
+        (route) => false);
+  }
+
+  Future<void> displayAlertDialog(int index) async {
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
               title: const Text('Внимание'),
-              content: Text('Удалить продукт ' + name + ' из заказа?'),
+              content: Text('Удалить продукт ' +
+                  widget.order.basket[index].name +
+                  ' из заказа?'),
               actions: <Widget>[
                 FlatButton(
                   color: Colors.red,

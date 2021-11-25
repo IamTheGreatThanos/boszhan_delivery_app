@@ -51,6 +51,7 @@ dependencies:
   esc_pos_utils: ^1.1.0
   image: ^3.0.8
   windows1251: ^0.0.3
+  provider: ^6.0.1
 
 dev_dependencies:
   flutter_test:
