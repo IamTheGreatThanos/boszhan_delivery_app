@@ -19,9 +19,6 @@ class ChangeProductsInOrderPage extends StatefulWidget {
 }
 
 class _ChangeProductsInOrderPageState extends State<ChangeProductsInOrderPage> {
-  late Order _order;
-  int indexForDelete = -1;
-
   @override
   void initState() {
     super.initState();
@@ -34,10 +31,7 @@ class _ChangeProductsInOrderPageState extends State<ChangeProductsInOrderPage> {
   }
 
   void _onChangeData(newIndex) {
-    setState(() {
-      indexForDelete = newIndex;
-    });
-    displayAlertDialog(indexForDelete);
+    displayAlertDialog(newIndex);
   }
 
   @override
