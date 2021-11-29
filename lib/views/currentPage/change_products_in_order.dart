@@ -234,13 +234,20 @@ class _ChangeProductsInOrderPageState extends State<ChangeProductsInOrderPage> {
     });
   }
 
-  void toHistory() {
-    Navigator.pushAndRemoveUntil<dynamic>(
-        context,
-        MaterialPageRoute<dynamic>(
-          builder: (BuildContext context) => HomePage(),
-        ),
-        (route) => false);
+  void toHistory() async {
+    var response = await OrdersProvider().rollBack(widget.order.id.toString());
+    if (response == 'Success') {
+      Navigator.pushAndRemoveUntil<dynamic>(
+          context,
+          MaterialPageRoute<dynamic>(
+            builder: (BuildContext context) => HomePage(),
+          ),
+          (route) => false);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Something went wrong.", style: TextStyle(fontSize: 20)),
+      ));
+    }
   }
 
   Future<void> displayAlertDialog(int index) async {
