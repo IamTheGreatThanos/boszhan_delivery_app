@@ -48,7 +48,7 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
             title: const Text('Выполненные заказы',
                 style: TextStyle(color: Colors.white, fontSize: 20)),
             actions: <Widget>[
-              widget.order.status == 3
+              widget.order.status == 3 || widget.order.status == 5
                   ? Padding(
                       padding: const EdgeInsets.only(right: 20.0),
                       child: GestureDetector(
