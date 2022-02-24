@@ -204,27 +204,27 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                             });
                           },
                           hint: const Text("Select item"))),
-                  _value == 4
-                      ? TextFormField(
-                          controller: phoneController,
-                          decoration: const InputDecoration(
-                              hintText: "Номер телефона kaspi.kz"),
-                          keyboardType: TextInputType.phone,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(RegExp("[0-9]")),
-                            _mobileFormatter,
-                          ],
-                          maxLength: 12,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Номер телефона';
-                            } else if (!value.contains('+')) {
-                              return 'Введите корректный номер телефона';
-                            }
-                            return null;
-                          },
-                        )
-                      : Container(),
+                  // _value == 4
+                  //     ? TextFormField(
+                  //         controller: phoneController,
+                  //         decoration: const InputDecoration(
+                  //             hintText: "Номер телефона kaspi.kz"),
+                  //         keyboardType: TextInputType.phone,
+                  //         inputFormatters: <TextInputFormatter>[
+                  //           FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                  //           _mobileFormatter,
+                  //         ],
+                  //         maxLength: 12,
+                  //         validator: (value) {
+                  //           if (value!.isEmpty) {
+                  //             return 'Номер телефона';
+                  //           } else if (!value.contains('+')) {
+                  //             return 'Введите корректный номер телефона';
+                  //           }
+                  //           return null;
+                  //         },
+                  //       )
+                  //     : Container(),
                   _value == 4 || _value == 1
                       ? SizedBox(
                           height: 60,
@@ -289,7 +289,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                   var connectivityResult =
                       await (Connectivity().checkConnectivity());
                   if (connectivityResult == ConnectivityResult.mobile) {
-                    if (_value == 4) {
+                    if (_value == 400) {
                       if (phoneController.text.length == 12) {
                         setState(() {
                           finishOrder(int.parse(_value.toString()),
@@ -306,7 +306,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                       finishOrder(int.parse(_value.toString()), 'null');
                     }
                   } else if (connectivityResult == ConnectivityResult.wifi) {
-                    if (_value == 4) {
+                    if (_value == 400) {
                       if (phoneController.text.length == 12) {
                         setState(() {
                           finishOrder(int.parse(_value.toString()),
