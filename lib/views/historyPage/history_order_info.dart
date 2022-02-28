@@ -74,29 +74,29 @@ class _HistoryOrderInfoPageState extends State<HistoryOrderInfoPage> {
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold)),
                                       ),
-                                      // Padding(
-                                      //   padding: const EdgeInsets.all(10),
-                                      //   child: SizedBox(
-                                      //     width: 400,
-                                      //     height: 60,
-                                      //     child: ElevatedButton.icon(
-                                      //       icon: const Icon(
-                                      //           Icons.my_library_books_rounded,
-                                      //           color: Colors.white),
-                                      //       label:
-                                      //           const Text("Вернуть в текущие"),
-                                      //       onPressed: () {
-                                      //         changeStatus();
-                                      //       },
-                                      //       style: ElevatedButton.styleFrom(
-                                      //         primary: Colors.blue,
-                                      //         textStyle: const TextStyle(
-                                      //             color: Colors.white,
-                                      //             fontSize: 18),
-                                      //       ),
-                                      //     ),
-                                      //   ),
-                                      // ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: SizedBox(
+                                          width: 400,
+                                          height: 60,
+                                          child: ElevatedButton.icon(
+                                            icon: const Icon(
+                                                Icons.my_library_books_rounded,
+                                                color: Colors.white),
+                                            label:
+                                                const Text("Вернуть в текущие"),
+                                            onPressed: () {
+                                              changeStatus();
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              primary: Colors.blue,
+                                              textStyle: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                       isContainsDeliveryBasket
                                           ? Padding(
                                               padding: const EdgeInsets.all(10),
